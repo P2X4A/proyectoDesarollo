@@ -1,22 +1,23 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { ContenidocomponentComponent } from './components/contenidocomponent/contenidocomponent';
-import { CrearproductocomponentComponent } from './components/crearproductocomponent/crearproductocomponent';
-import { ListarproductocomponentComponent } from './components/listarproductocomponent/listarproductocomponent';
-import { ActualizarproductocomponentComponent } from './components/actualizarproductocomponent/actualizarproductocomponent';
-import { EliminarproductocomponentComponent } from './components/eliminarproductocomponent/eliminarproductocomponent';
-import { CategoriascomponentComponent } from './components/categoriascomponent/categoriascomponent';
-import { MercadoplaycomponentComponent } from './components/mercadoplaycomponent/mercadoplaycomponent';
+import { Contenidocomponent } from './components/contenidocomponent/contenidocomponent';
+import { Crearproductocomponent } from './components/crearproductocomponent/crearproductocomponent';
+import { Listarproductocomponent } from './components/listarproductocomponent/listarproductocomponent';
+import { Actualizarproductocomponent } from './components/actualizarproductocomponent/actualizarproductocomponent';
+import { Eliminarproductocomponent } from './components/eliminarproductocomponent/eliminarproductocomponent';
+import { Categoriascomponent } from './components/categoriascomponent/categoriascomponent';
+import { Mercadoplaycomponent } from './components/mercadoplaycomponent/mercadoplaycomponent';
+
 
 const routes: Routes = [
-  { path: '', component: ContenidocomponentComponent },
-  { path: 'crear-producto', component: CrearproductocomponentComponent },
-  { path: 'listar-producto', component: ListarproductocomponentComponent },
-  { path: 'actualizar-producto', component: ActualizarproductocomponentComponent },
-  { path: 'eliminar-producto', component: EliminarproductocomponentComponent },
-  { path: 'categoria', component: CategoriascomponentComponent },
-  { path: 'mercado-play', component: MercadoplaycomponentComponent },
+  { path: '', component: Contenidocomponent },
+  { path: 'crear-producto', component: Crearproductocomponent },
+  { path: 'listar-producto', component: Listarproductocomponent },
+  { path: 'actualizar-producto', component: Actualizarproductocomponent },
+  { path: 'eliminar-producto', component: Eliminarproductocomponent },
+  { path: 'categoria', component: Categoriascomponent },
+  { path: 'mercado-play', component: Mercadoplaycomponent },
   { path: '**', redirectTo: '', pathMatch: 'full' }
 ];
 
