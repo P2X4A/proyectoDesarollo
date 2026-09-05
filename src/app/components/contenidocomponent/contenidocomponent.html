@@ -100,6 +100,14 @@
               </div>
               <small class="text-muted">({{ oferta.vendidos }})</small>
             </div>
+            <button
+              class="btn btn-sm w-100 mt-2"
+              [ngClass]="agregados.has(oferta.id) ? 'btn-success' : 'btn-primary'"
+              (click)="agregarAlCarrito(oferta)"
+            >
+              <i class="fa-solid" [ngClass]="agregados.has(oferta.id) ? 'fa-check' : 'fa-cart-plus'"></i>
+              {{ agregados.has(oferta.id) ? '¡Agregado!' : 'Agregar al carrito' }}
+            </button>
           </div>
         </div>
       </div>

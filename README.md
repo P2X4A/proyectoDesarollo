@@ -1,59 +1,79 @@
-# ProyectoDesarollo
+# Clon de Mercado Libre Colombia 🇨🇴
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.1.7.
+Réplica educativa de la página de inicio de **Mercado Libre Colombia**, desarrollada con **Angular 22** (proyecto no-standalone, con `AppModule`). Incluye navbar y footer fieles al diseño original, catálogo de productos, categorías, sección de streaming y carrito de compras funcional.
 
-## Development server
+## ✨ Funcionalidades
 
-To start a local development server, run:
+- **Navbar estilo ML Colombia**: logo, buscador ("Ingresa lo que quieras encontrar"), ubicación, categorías reales, Ofertas, Cupones, Supermercado, Moda, Mercado Play, Vender y Ayuda.
+- **Contenido principal**: carrusel de banners, atajo a Mercado Play, categorías destacadas, ofertas del día, productos más buscados y búsqueda por inicial (A–Z).
+- **Carrito de compras** (`/carrito`): agregar/quitar productos, cantidades, resumen con envío, checkout con formulario y confirmación de pedido. Persiste en `localStorage` y el badge del navbar se actualiza en vivo.
+- **Mercado Play** (`/mercado-play`): catálogo de películas consumiendo la API de OMDb.
+- **CRUD de productos**: crear, listar, actualizar y eliminar publicaciones.
+- **Footer estilo ML Colombia**: beneficios, métodos de pago (Visa, Mastercard, PSE, Efecty, Nequi…), links de ayuda/PQR, redes oficiales y aviso legal.
 
-```bash
-ng serve
+## 🛠️ Tecnologías
+
+| Tecnología | Uso |
+| --- | --- |
+| **Angular 22** + Angular CLI 22 | Framework principal (módulos, routing, `HttpClient`, `FormsModule`) |
+| TypeScript + RxJS | Lógica y consumo de APIs con observables |
+| Bootstrap 5.3 | Layout y componentes (vía CDN) |
+| Font Awesome 6 | Iconografía (vía CDN) |
+| Animate.css 4 | Animaciones de entrada (vía CDN) |
+| Fake Store API | Catálogo de productos (`https://fakestoreapi.com`) |
+| OMDb API | Películas de Mercado Play (`https://www.omdbapi.com`) |
+
+## 📁 Estructura
+
+```text
+src/
+├── index.html                  # CDN: Bootstrap, Font Awesome, Animate.css
+├── styles.css                  # Estilos globales
+├── public/mercado_free.ico     # Favicon
+└── app/
+    ├── environments/           # URLs base y API keys (OMDb, FakeStore)
+    ├── models/                 # Interfaces del carrito (producto, item, pedido)
+    ├── services/
+    │   ├── cart.service.ts     # Carrito + checkout (localStorage)
+    │   ├── fake-store/         # Productos (CRUD completo)
+    │   └── omdb/               # Películas
+    └── components/
+        ├── navbarcomponent/    # Barra superior (2 filas amarilla/blanca)
+        ├── contenidocomponent/ # Home: banners, ofertas, búsquedas
+        ├── categoriascomponent/# Grilla de categorías
+        ├── mercadoplaycomponent/
+        ├── crear/listar/actualizar/eliminar-productocomponent/
+        ├── carritocomponent/
+        └── footercomponent/    # 5 bloques estilo ML Colombia
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## 🚀 Desarrollo
 
 ```bash
-ng generate component component-name
+npm install
+npx ng serve
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Abre `http://localhost:4200/`. La app se recarga sola al editar archivos.
+
+## 📦 Build
 
 ```bash
-ng generate --help
+npx ng build
 ```
 
-## Building
+Los artefactos quedan en `dist/`.
 
-To build the project run:
+## 🧪 Tests
 
 ```bash
-ng build
+npx ng test
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## 👥 Ramas
 
-## Running unit tests
+- `ramaHTMLComponents` — maquetación, estilos y conexión de APIs.
+- `DanielAya_CarritoCompra` — carrito de compras (ya integrado a `ramaHTMLComponents`).
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+---
+Proyecto con fines académicos. No afiliado a MercadoLibre, Inc.

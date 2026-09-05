@@ -1,6 +1,8 @@
 import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { FakeStoreService } from '../../services/fake-store/fake-store.service';
+import { CartService } from '../../services/cart.service';
 import type { Product } from '../../services/fake-store/product.model';
+import type { Producto } from '../../models/producto';
 
 /** Banner del carrusel hero */
 interface Banner {
@@ -29,6 +31,10 @@ interface CategoriaDestacada {
 })
 export class Contenidocomponent implements OnInit, OnDestroy {
   private fakeStoreService = inject(FakeStoreService);
+  private cartService = inject(CartService);
+
+  /** IDs con confirmación visual de "agregado" (feedback temporal). */
+  agregados = new Set<number>();
 
   /* ── Carousel ── */
   carouselIndex = 0;
@@ -153,6 +159,21 @@ export class Contenidocomponent implements OnInit, OnDestroy {
   /* ── Utilidades ── */
   formatPrice(precio: number): string {
     return '$ ' + precio.toLocaleString('es-CO');
+  }
+
+  /** Agrega una oferta al carrito (precios ya convertidos a COP). */
+  agregarAlCarrito(oferta: any): void {
+    const producto: Producto = {
+      id: oferta.id,
+      title: oferta.nombre,
+      price: oferta.precio,
+      description: oferta.nombre,
+      category: 'Ofertas',
+      image: oferta.imagen,
+    };
+    this.cartService.agregarProducto(producto);
+    this.agregados.add(oferta.id);
+    setTimeout(() => this.agregados.delete(oferta.id), 1500);
   }
 
   /** Retorna un array del tamaño del rating para renderizar estrellas */

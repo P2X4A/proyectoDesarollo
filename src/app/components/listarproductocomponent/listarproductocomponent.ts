@@ -1,6 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FakeStoreService } from '../../services/fake-store/fake-store.service';
+import { CartService } from '../../services/cart.service';
 import type { Product } from '../../services/fake-store/product.model';
+import type { Producto } from '../../models/producto';
 
 interface ProductoVista {
   id: number;
@@ -19,6 +21,7 @@ interface ProductoVista {
 })
 export class Listarproductocomponent implements OnInit {
   private fakeStoreService = inject(FakeStoreService);
+  private cartService = inject(CartService);
 
   productos: ProductoVista[] = [];
   isLoading: boolean = true;
@@ -46,5 +49,18 @@ export class Listarproductocomponent implements OnInit {
         this.isLoading = false;
       },
     });
+  }
+
+  /** Agrega una publicación al carrito (precios ya convertidos a COP). */
+  agregarAlCarrito(prod: ProductoVista): void {
+    const producto: Producto = {
+      id: prod.id,
+      title: prod.nombre,
+      price: prod.precio,
+      description: prod.nombre,
+      category: prod.categoria,
+      image: prod.imagen,
+    };
+    this.cartService.agregarProducto(producto);
   }
 }
