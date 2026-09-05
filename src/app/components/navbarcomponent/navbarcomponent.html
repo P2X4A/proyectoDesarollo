@@ -25,11 +25,11 @@
           id="ml-search-input"
           type="text"
           class="form-control ml-navbar__search-input"
-          placeholder="Buscar productos, marcas y más…"
+          placeholder="Ingresa lo que quieras encontrar"
           [(ngModel)]="searchQuery"
           name="searchQuery"
           autocomplete="off"
-          aria-label="Buscar productos, marcas y más"
+          aria-label="Ingresa lo que quieras encontrar"
         />
         <button type="submit" class="btn ml-navbar__search-btn" aria-label="Buscar">
           <i class="fa-solid fa-magnifying-glass"></i>
@@ -96,26 +96,7 @@
           <i class="fa-solid fa-bars me-1"></i>Categorías
         </button>
         <ul class="dropdown-menu ml-navbar__dropdown">
-          <li>
-            <a class="dropdown-item" routerLink="/categoria">
-              <i class="fa-solid fa-mobile-screen me-2 text-warning"></i>Electrónica
-            </a>
-          </li>
-          <li>
-            <a class="dropdown-item" routerLink="/categoria">
-              <i class="fa-solid fa-shirt me-2 text-warning"></i>Ropa y accesorios
-            </a>
-          </li>
-          <li>
-            <a class="dropdown-item" routerLink="/categoria">
-              <i class="fa-solid fa-house me-2 text-warning"></i>Hogar y jardín
-            </a>
-          </li>
-          <li>
-            <a class="dropdown-item" routerLink="/categoria">
-              <i class="fa-solid fa-dumbbell me-2 text-warning"></i>Deportes
-            </a>
-          </li>
+          <!-- Categorías reales de mercadolibre.com.co -->
           <li>
             <a class="dropdown-item" routerLink="/categoria">
               <i class="fa-solid fa-car me-2 text-warning"></i>Vehículos
@@ -123,12 +104,47 @@
           </li>
           <li>
             <a class="dropdown-item" routerLink="/categoria">
-              <i class="fa-solid fa-gamepad me-2 text-warning"></i>Videojuegos
+              <i class="fa-solid fa-cart-shopping me-2 text-warning"></i>Supermercado
             </a>
           </li>
           <li>
             <a class="dropdown-item" routerLink="/categoria">
-              <i class="fa-solid fa-screwdriver-wrench me-2 text-warning"></i>Herramientas
+              <i class="fa-solid fa-microchip me-2 text-warning"></i>Tecnología
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item" routerLink="/categoria">
+              <i class="fa-solid fa-prescription-bottle-medical me-2 text-warning"></i>Farmacia
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item" routerLink="/categoria">
+              <i class="fa-solid fa-plug-circle-bolt me-2 text-warning"></i>Electrodomésticos
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item" routerLink="/categoria">
+              <i class="fa-solid fa-couch me-2 text-warning"></i>Hogar y Muebles
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item" routerLink="/categoria">
+              <i class="fa-solid fa-dumbbell me-2 text-warning"></i>Deportes y Fitness
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item" routerLink="/categoria">
+              <i class="fa-solid fa-paw me-2 text-warning"></i>Mascotas
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item" routerLink="/categoria">
+              <i class="fa-solid fa-shirt me-2 text-warning"></i>Moda
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item" routerLink="/categoria">
+              <i class="fa-solid fa-gamepad me-2 text-warning"></i>Juegos y Juguetes
             </a>
           </li>
           <li><hr class="dropdown-divider" /></li>
@@ -144,11 +160,19 @@
       <span class="ml-navbar__divider d-none d-md-block"></span>
 
       <a class="ml-navbar__nav-link d-none d-md-block text-nowrap" routerLink="/">
-        Ofertas
+        <i class="fa-solid fa-tags me-1"></i>Ofertas
       </a>
 
-      <a class="ml-navbar__nav-link d-none d-lg-block text-nowrap" routerLink="/listar-producto">
-        Historial
+      <a class="ml-navbar__nav-link d-none d-lg-block text-nowrap" routerLink="/">
+        <i class="fa-solid fa-ticket me-1"></i>Cupones
+      </a>
+
+      <a class="ml-navbar__nav-link d-none d-lg-block text-nowrap" routerLink="/categoria">
+        <i class="fa-solid fa-cart-shopping me-1"></i>Supermercado
+      </a>
+
+      <a class="ml-navbar__nav-link d-none d-lg-block text-nowrap" routerLink="/categoria">
+        <i class="fa-solid fa-shirt me-1"></i>Moda
       </a>
 
       <a class="ml-navbar__nav-link d-none d-lg-block text-nowrap" routerLink="/mercado-play">

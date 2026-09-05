@@ -1,10 +1,11 @@
 <div class="ml-categories-page">
   <div class="container py-5">
-    <h2 class="mb-4 fw-bold">Categorías para explorar</h2>
-    
+    <h2 class="mb-1 fw-bold animate__animated animate__fadeInDown"><i class="fa-solid fa-shapes text-primary me-2"></i>Categorías para explorar</h2>
+    <p class="text-muted mb-4 animate__animated animate__fadeIn"><i class="fa-regular fa-compass me-1"></i>Encuentra todo lo que buscas, organizado por sección</p>
+
     <div class="row g-4">
-      <div class="col-6 col-md-4 col-lg-3" *ngFor="let cat of categorias">
-        <div class="ml-cat-card p-3 rounded bg-white shadow-sm h-100 d-flex flex-column align-items-center text-center">
+      <div class="col-6 col-md-4 col-lg-3" *ngFor="let cat of categorias; let i = index">
+        <div class="ml-cat-card p-3 rounded bg-white shadow-sm h-100 d-flex flex-column align-items-center text-center animate__animated animate__fadeInUp" [style.animation-delay]="(i * 60) + 'ms'">
           <div class="ml-cat-img-wrapper mb-3 rounded-circle d-flex align-items-center justify-content-center bg-light overflow-hidden shadow-sm">
              <img [src]="cat.img" alt="{{ cat.nombre }}" class="w-100 h-100" style="object-fit: cover;">
           </div>

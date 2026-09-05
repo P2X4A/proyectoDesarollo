@@ -83,12 +83,12 @@ export class Contenidocomponent implements OnInit, OnDestroy {
   ofertas: any[] = [];
   isLoadingOfertas: boolean = true;
 
-  /* ── Búsquedas populares ── */
+  /* ── Productos más buscados (lista real de mercadolibre.com.co) ── */
   busquedasPopulares: string[] = [
-    'celulares', 'laptop', 'zapatillas nike', 'audífonos', 'camisas hombre',
-    'nevera', 'televisor', 'tablet', 'bicicleta', 'perfumes',
-    'silla gamer', 'iphone', 'samsung galaxy', 'adidas', 'xbox',
-    'playstation', 'monitor', 'cámara fotos', 'smartwatch', 'escritorio',
+    'air fryer', 'aire acondicionado', 'airpods', 'alexa', 'apple watch',
+    'audifonos', 'ipad', 'iphone 16', 'jbl', 'lavadora',
+    'lenovo', 'motorola', 'nevera', 'nintendo switch', 'playstation 5',
+    'redmi', 'samsung a54', 'silla gamer', 'smartwatch', 'xiaomi',
   ];
 
   /* ── Índice alfabético ── */

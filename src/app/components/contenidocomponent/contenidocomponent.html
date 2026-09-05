@@ -11,7 +11,7 @@
           <div class="col-12 col-md-6 text-center text-md-start">
             <h2 class="display-4 fw-bold mb-3">{{ banners[carouselIndex].titulo }}</h2>
             <p class="fs-5 mb-4">{{ banners[carouselIndex].subtitulo }}</p>
-            <button class="btn btn-dark btn-lg px-4">{{ banners[carouselIndex].cta }}</button>
+            <button class="btn btn-dark btn-lg px-4">{{ banners[carouselIndex].cta }} <i class="fa-solid fa-arrow-right ms-2"></i></button>
           </div>
           <div class="col-12 col-md-5 text-center d-none d-md-block">
             <img
@@ -44,14 +44,14 @@
   </div>
 
   <!-- Sección: Mercado Play / Atajo -->
-  <div class="container-fluid mt-5 mb-4 ml-max-width">
+  <div class="container-fluid mt-5 mb-4 ml-max-width animate__animated animate__fadeInUp">
     <div class="d-flex align-items-center p-3 rounded shadow-sm bg-white border">
       <i class="fa-solid fa-play fa-2x ms-2 me-3" style="color: rgb(52, 131, 250)"></i>
       <div>
-        <h5 class="mb-0 fw-bold">Mercado Play</h5>
+        <h5 class="mb-0 fw-bold">Mercado Play <span class="badge bg-info text-dark ms-1"><i class="fa-solid fa-clapperboard me-1"></i>Gratis</span></h5>
         <span class="text-muted">Disfruta de películas y series gratis.</span>
       </div>
-      <button class="btn btn-outline-primary ms-auto me-2" routerLink="/mercado-play">Ver ahora</button>
+      <button class="btn btn-outline-primary ms-auto me-2" routerLink="/mercado-play"><i class="fa-regular fa-circle-play me-1"></i>Ver ahora</button>
     </div>
   </div>
 
@@ -70,8 +70,8 @@
   </div>
 
   <!-- Ofertas del Día -->
-  <div class="container-fluid mb-5 ml-max-width">
-    <h3 class="fw-semibold mb-4 text-dark">Ofertas del día <a routerLink="/" class="text-primary fs-6 fw-normal ms-3 text-decoration-none">Ver todas</a></h3>
+  <div class="container-fluid mb-5 ml-max-width animate__animated animate__fadeInUp">
+    <h3 class="fw-semibold mb-4 text-dark"><i class="fa-solid fa-bolt text-warning me-2"></i>Ofertas del día <a routerLink="/" class="text-primary fs-6 fw-normal ms-3 text-decoration-none">Ver todas<i class="fa-solid fa-chevron-right fa-xs ms-1"></i></a></h3>
     
     <div *ngIf="isLoadingOfertas" class="text-center py-5">
       <div class="spinner-border text-primary" role="status">
@@ -108,17 +108,17 @@
 
   <!-- Búsquedas Populares -->
   <div class="container-fluid mb-5 ml-max-width">
-    <h3 class="fw-semibold mb-4 text-dark text-center">Búsquedas populares</h3>
+    <h3 class="fw-semibold mb-4 text-dark text-center"><i class="fa-solid fa-fire text-danger me-2"></i>Búsquedas populares</h3>
     <div class="d-flex flex-wrap justify-content-center gap-2">
       <span *ngFor="let b of busquedasPopulares; let idx = index" class="badge rounded-pill bg-white text-dark border p-2 px-3 fw-normal">
-        {{ idx + 1 }}. {{ b }}
+        <i class="fa-solid fa-magnifying-glass fa-xs me-1 text-muted"></i>{{ idx + 1 }}. {{ b }}
       </span>
     </div>
   </div>
 
   <!-- Índice Alfabético -->
   <div class="container-fluid mb-5 ml-max-width text-center">
-    <h3 class="fw-semibold mb-4 text-dark">Buscar productos por inicial</h3>
+    <h3 class="fw-semibold mb-4 text-dark"><i class="fa-solid fa-arrow-down-a-z text-primary me-2"></i>Buscar productos por inicial</h3>
     <div class="d-flex flex-wrap justify-content-center gap-2">
       <a routerLink="/" *ngFor="let letra of letras" class="btn btn-outline-secondary btn-sm rounded-circle ml-letter-btn">
         {{ letra }}

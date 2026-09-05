@@ -1,17 +1,17 @@
 <div class="ml-play-page text-white">
   <!-- Hero Banner Play -->
   <div class="ml-play-hero d-flex align-items-center justify-content-center text-center p-5">
-    <div>
+    <div class="animate__animated animate__zoomIn">
       <i class="fa-solid fa-play fa-4x mb-3 text-info"></i>
       <h1 class="display-4 fw-bold">Mercado Play</h1>
-      <p class="fs-5">Disfruta del mejor entretenimiento sin costo adicional.</p>
-      <button class="btn btn-info btn-lg mt-3 text-dark fw-bold px-5 rounded-pill">Explorar Catálogo</button>
+      <p class="fs-5"><i class="fa-solid fa-ticket me-1"></i>Disfruta del mejor entretenimiento sin costo adicional.</p>
+      <button class="btn btn-info btn-lg mt-3 text-dark fw-bold px-5 rounded-pill"><i class="fa-regular fa-circle-play me-2"></i>Explorar Catálogo</button>
     </div>
   </div>
 
   <!-- Carrusel de Películas -->
   <div class="container py-5">
-    <h3 class="fw-bold mb-4">Agregadas recientemente</h3>
+    <h3 class="fw-bold mb-4"><i class="fa-solid fa-clapperboard text-info me-2"></i>Agregadas recientemente</h3>
     <!-- Skeleton Loader / Mensaje de carga -->
     <div *ngIf="isLoading" class="text-center py-5">
       <div class="spinner-border text-info" role="status">

@@ -1,13 +1,16 @@
 <div class="ml-list-page py-5">
-  <div class="container ml-list-container bg-white p-4 p-md-5 rounded shadow-sm">
+  <div class="container ml-list-container bg-white p-4 p-md-5 rounded shadow-sm animate__animated animate__fadeIn">
     <div class="d-flex justify-content-between align-items-center mb-4">
-      <h2 class="fw-bold text-dark m-0">Mis publicaciones</h2>
-      <button class="btn btn-primary ml-btn-primary fw-bold" routerLink="/crear-producto">Publicar nuevo</button>
+      <h2 class="fw-bold text-dark m-0"><i class="fa-solid fa-boxes-stacked text-primary me-2"></i>Mis publicaciones</h2>
+      <button class="btn btn-primary ml-btn-primary fw-bold" routerLink="/crear-producto"><i class="fa-solid fa-plus me-1"></i>Publicar nuevo</button>
     </div>
 
     <!-- Search/Filter bar -->
     <div class="d-flex gap-3 mb-4">
-      <input type="text" class="form-control" placeholder="Buscar en mis publicaciones...">
+      <div class="input-group">
+        <span class="input-group-text bg-white"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
+        <input type="text" class="form-control" placeholder="Buscar en mis publicaciones...">
+      </div>
       <select class="form-select w-auto">
         <option value="" selected>Todas las categorías</option>
         <option value="Tecnología">Tecnología</option>
@@ -25,12 +28,12 @@
       <table class="table table-hover align-middle">
         <thead class="table-light text-muted">
           <tr>
-            <th scope="col" style="width: 50px;">ID</th>
-            <th scope="col">Título</th>
-            <th scope="col">Precio</th>
-            <th scope="col">Categoría</th>
-            <th scope="col">Estado</th>
-            <th scope="col" class="text-end">Acciones</th>
+            <th scope="col" style="width: 50px;"><i class="fa-solid fa-hashtag fa-xs me-1"></i>ID</th>
+            <th scope="col"><i class="fa-solid fa-heading fa-xs me-1"></i>Título</th>
+            <th scope="col"><i class="fa-solid fa-tag fa-xs me-1"></i>Precio</th>
+            <th scope="col"><i class="fa-solid fa-folder fa-xs me-1"></i>Categoría</th>
+            <th scope="col"><i class="fa-solid fa-circle-check fa-xs me-1"></i>Estado</th>
+            <th scope="col" class="text-end"><i class="fa-solid fa-gear fa-xs me-1"></i>Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -64,6 +67,7 @@
       <i class="fa-solid fa-box-open fa-4x mb-3 text-light"></i>
       <h5>Aún no tienes publicaciones</h5>
       <p>Empieza a vender tus productos ahora mismo.</p>
+      <button class="btn btn-primary mt-2" routerLink="/crear-producto"><i class="fa-solid fa-plus me-1"></i>Publicar mi primer producto</button>
     </div>
 
   </div>
