@@ -9,6 +9,8 @@ import { Eliminarproductocomponent } from './components/eliminarproductocomponen
 import { Categoriascomponent } from './components/categoriascomponent/categoriascomponent';
 import { Mercadoplaycomponent } from './components/mercadoplaycomponent/mercadoplaycomponent';
 
+import { Carritocomponent } from './components/carritocomponent/carritocomponent';
+
 
 const routes: Routes = [
   { path: '', component: Contenidocomponent },
@@ -18,7 +20,9 @@ const routes: Routes = [
   { path: 'eliminar-producto', component: Eliminarproductocomponent },
   { path: 'categoria', component: Categoriascomponent },
   { path: 'mercado-play', component: Mercadoplaycomponent },
-  { path: '**', redirectTo: '', pathMatch: 'full' }
+  { path: '**', redirectTo: '', pathMatch: 'full' },
+
+  { path: 'carrito', component: Carritocomponent },
 ];
 
 @NgModule({

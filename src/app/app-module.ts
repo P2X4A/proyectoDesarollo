@@ -11,6 +11,8 @@ import { Crearproductocomponent } from './components/crearproductocomponent/crea
 import { Actualizarproductocomponent } from './components/actualizarproductocomponent/actualizarproductocomponent';
 import { Listarproductocomponent } from './components/listarproductocomponent/listarproductocomponent';
 import { Eliminarproductocomponent } from './components/eliminarproductocomponent/eliminarproductocomponent';
+import { Carritocomponent } from './components/carritocomponent/carritocomponent';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -24,8 +26,9 @@ import { Eliminarproductocomponent } from './components/eliminarproductocomponen
     Actualizarproductocomponent,
     Listarproductocomponent,
     Eliminarproductocomponent,
+    Carritocomponent,
   ],
-  imports: [BrowserModule, AppRoutingModule],
+  imports: [BrowserModule, AppRoutingModule,FormsModule],
   providers: [provideBrowserGlobalErrorListeners()],
   bootstrap: [App],
 })

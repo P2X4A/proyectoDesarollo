@@ -1,1 +1,5 @@
 <p>navbarcomponent works!</p>
+<a routerLink="/carrito" class="position-relative">
+  <i class="fa-solid fa-cart-shopping"></i>
+  <span class="badge bg-danger rounded-pill" *ngIf="totalItems > 0">{{ totalItems }}</span>
+</a>
