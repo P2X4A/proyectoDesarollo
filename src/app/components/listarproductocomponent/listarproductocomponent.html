@@ -1,1 +1,70 @@
-<p>listarproductocomponent works!</p>
+<div class="ml-list-page py-5">
+  <div class="container ml-list-container bg-white p-4 p-md-5 rounded shadow-sm">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="fw-bold text-dark m-0">Mis publicaciones</h2>
+      <button class="btn btn-primary ml-btn-primary fw-bold" routerLink="/crear-producto">Publicar nuevo</button>
+    </div>
+
+    <!-- Search/Filter bar -->
+    <div class="d-flex gap-3 mb-4">
+      <input type="text" class="form-control" placeholder="Buscar en mis publicaciones...">
+      <select class="form-select w-auto">
+        <option value="" selected>Todas las categorías</option>
+        <option value="Tecnología">Tecnología</option>
+      </select>
+    </div>
+    
+    <div *ngIf="isLoading" class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+      <p class="mt-3 text-muted">Cargando tus publicaciones...</p>
+    </div>
+    
+    <div class="table-responsive" *ngIf="!isLoading && productos.length > 0">
+      <table class="table table-hover align-middle">
+        <thead class="table-light text-muted">
+          <tr>
+            <th scope="col" style="width: 50px;">ID</th>
+            <th scope="col">Título</th>
+            <th scope="col">Precio</th>
+            <th scope="col">Categoría</th>
+            <th scope="col">Estado</th>
+            <th scope="col" class="text-end">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let prod of productos">
+            <td class="text-muted">#{{ prod.id }}</td>
+            <td class="fw-semibold text-dark">{{ prod.nombre }}</td>
+            <td>{{ prod.precio | currency:'COP':'symbol-narrow':'1.0-0' }}</td>
+            <td class="text-muted">{{ prod.categoria }}</td>
+            <td>
+              <span class="badge" [ngClass]="{'bg-success': prod.estado === 'Activo', 'bg-secondary': prod.estado !== 'Activo'}">
+                {{ prod.estado }}
+              </span>
+            </td>
+            <td class="text-end">
+              <div class="dropdown">
+                <button class="btn btn-sm btn-light rounded-circle ml-action-btn" type="button" data-bs-toggle="dropdown">
+                  <i class="fa-solid fa-ellipsis-vertical"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                  <li><a class="dropdown-item py-2" routerLink="/actualizar-producto"><i class="fa-solid fa-pen me-2 text-muted"></i>Modificar</a></li>
+                  <li><a class="dropdown-item py-2 text-danger" routerLink="/eliminar-producto"><i class="fa-solid fa-trash me-2"></i>Eliminar</a></li>
+                </ul>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="!isLoading && productos.length === 0" class="text-center py-5 text-muted">
+      <i class="fa-solid fa-box-open fa-4x mb-3 text-light"></i>
+      <h5>Aún no tienes publicaciones</h5>
+      <p>Empieza a vender tus productos ahora mismo.</p>
+    </div>
+
+  </div>
+</div>

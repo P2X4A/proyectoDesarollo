@@ -1,0 +1,34 @@
+.ml-play-page {
+  background-color: rgb(15, 15, 20);
+  min-height: calc(100vh - 200px);
+}
+
+.ml-play-hero {
+  /* Imagen sin copyright (Unsplash License) + degradado para legibilidad */
+  background:
+    linear-gradient(180deg, rgba(20, 20, 30, 0.85) 0%, rgba(15, 15, 20, 0.95) 100%),
+    url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1600&q=80')
+      center / cover no-repeat;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  min-height: 320px;
+}
+
+.ml-movie-card {
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.ml-movie-card:hover {
+  transform: scale(1.05);
+  z-index: 2;
+}
+
+.ml-movie-overlay {
+  background-color: rgba(0,0,0,0.5);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.ml-movie-card:hover .ml-movie-overlay {
+  opacity: 1;
+}

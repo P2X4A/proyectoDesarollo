@@ -1,1 +1,207 @@
-<p>footercomponent works!</p>
+<!-- ===== FOOTER MERCADO LIBRE COLOMBIA ===== -->
+<footer class="ml-footer animate__animated animate__fadeIn">
+
+  <!-- ── Bloque 1: Beneficios (envío, seguridad, pagos) ── -->
+  <div class="ml-footer__benefits">
+    <div class="container-fluid justify-content-center">
+      <div class="ml-footer__benefits-inner d-flex justify-content-center flex-wrap gap-4">
+
+        <!-- Envío gratis -->
+        <div class="ml-footer__benefit-item d-flex align-items-center gap-2">
+          <i class="fa-solid fa-truck-fast fa-2x text-success"></i>
+          <div>
+            <p class="mb-0 fw-semibold">Envío gratis</p>
+            <small class="text-muted">En tu primera compra</small>
+          </div>
+        </div>
+
+        <!-- Devoluciones -->
+        <div class="ml-footer__benefit-item d-flex align-items-center gap-2">
+          <i class="fa-solid fa-rotate-left fa-2x text-success"></i>
+          <div>
+            <p class="mb-0 fw-semibold">Devoluciones gratis</p>
+            <small class="text-muted">30 días para devolver</small>
+          </div>
+        </div>
+
+        <!-- Seguridad -->
+        <div class="ml-footer__benefit-item d-flex align-items-center gap-2">
+          <i class="fa-solid fa-shield-halved fa-2x text-success"></i>
+          <div>
+            <p class="mb-0 fw-semibold">Compra segura</p>
+            <small class="text-muted">Del principio al fin</small>
+          </div>
+        </div>
+
+        <!-- Garantía -->
+        <div class="ml-footer__benefit-item d-flex align-items-center gap-2">
+          <i class="fa-solid fa-medal fa-2x text-success"></i>
+          <div>
+            <p class="mb-0 fw-semibold">Garantía extendida</p>
+            <small class="text-muted">Protege tu compra</small>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Bloque 2: Métodos de pago ── -->
+  <div class="ml-footer__payments">
+    <div class="container-fluid justify-content-center">
+      <div class="ml-footer__section-inner">
+        <h6 class="ml-footer__section-title">
+          <i class="fa-solid fa-credit-card me-2"></i>Métodos de pago
+        </h6>
+        <div class="d-flex flex-wrap align-items-center gap-2 mt-2">
+          <span class="ml-footer__payment-badge">
+            <i class="fa-brands fa-cc-visa fa-xl"></i> Visa
+          </span>
+          <span class="ml-footer__payment-badge">
+            <i class="fa-brands fa-cc-mastercard fa-xl"></i> Mastercard
+          </span>
+          <span class="ml-footer__payment-badge">
+            <i class="fa-brands fa-cc-amex fa-xl"></i> Amex
+          </span>
+          <span class="ml-footer__payment-badge">
+            <i class="fa-solid fa-university fa-lg me-1"></i> PSE
+          </span>
+          <span class="ml-footer__payment-badge">
+            <i class="fa-solid fa-money-bill-wave fa-lg me-1"></i> Efecty
+          </span>
+          <span class="ml-footer__payment-badge">
+            <img src="https://http2.mlstatic.com/frontend-assets/payment-methods-logos/nequi.svg"
+                 alt="Nequi" height="18" style="vertical-align:middle" /> Nequi
+          </span>
+          <span class="ml-footer__payment-badge">
+            <i class="fa-solid fa-landmark fa-lg me-1"></i> Daviplata
+          </span>
+          <span class="ml-footer__payment-badge">
+            <i class="fa-solid fa-money-check fa-lg me-1"></i> Cuotas sin interés
+          </span>
+        </div>
+        <small class="text-muted mt-2 d-block">
+          <i class="fa-solid fa-lock me-1"></i>
+          Tus datos personales están protegidos con cifrado SSL
+        </small>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Bloque 3: Links de navegación ── -->
+  <div class="ml-footer__links">
+    <div class="container-fluid justify-content-center">
+      <div class="ml-footer__section-inner">
+        <div class="row g-4">
+
+          <!-- Servicios -->
+          <div class="col-6 col-md-3">
+            <h6 class="ml-footer__col-title">Servicios</h6>
+            <ul class="list-unstyled ml-footer__list">
+              <li><a routerLink="/" class="ml-footer__link">Mercado Pago</a></li>
+              <li><a routerLink="/" class="ml-footer__link">Mercado Envíos</a></li>
+              <li><a routerLink="/" class="ml-footer__link">Mercado Shops</a></li>
+              <li><a routerLink="/" class="ml-footer__link">Mercado Crédito</a></li>
+              <li><a routerLink="/mercado-play" class="ml-footer__link">Mercado Play</a></li>
+              <li><a routerLink="/crear-producto" class="ml-footer__link">Vender</a></li>
+            </ul>
+          </div>
+
+          <!-- Mi cuenta -->
+          <div class="col-6 col-md-3">
+            <h6 class="ml-footer__col-title">Mi cuenta</h6>
+            <ul class="list-unstyled ml-footer__list">
+              <li><a href="#" class="ml-footer__link">Mis compras</a></li>
+              <li><a routerLink="/listar-producto" class="ml-footer__link">Mis publicaciones</a></li>
+              <li><a href="#" class="ml-footer__link">Mis ventas</a></li>
+              <li><a href="#" class="ml-footer__link">Favoritos</a></li>
+              <li><a href="#" class="ml-footer__link">Mensajes</a></li>
+              <li><a href="#" class="ml-footer__link">Mi perfil</a></li>
+            </ul>
+          </div>
+
+          <!-- Ayuda -->
+          <div class="col-6 col-md-3">
+            <h6 class="ml-footer__col-title">Ayuda y PQR</h6>
+            <ul class="list-unstyled ml-footer__list">
+              <li><a href="#" class="ml-footer__link">Centro de ayuda</a></li>
+              <li><a href="#" class="ml-footer__link">Cómo comprar</a></li>
+              <li><a href="#" class="ml-footer__link">Cómo vender</a></li>
+              <li><a href="#" class="ml-footer__link">Resolución de problemas</a></li>
+              <li><a href="#" class="ml-footer__link">Denuncias</a></li>
+              <li><a routerLink="/categoria" class="ml-footer__link">Categorías</a></li>
+            </ul>
+          </div>
+
+          <!-- Más info -->
+          <div class="col-6 col-md-3">
+            <h6 class="ml-footer__col-title">Información</h6>
+            <ul class="list-unstyled ml-footer__list">
+              <li><a href="#" class="ml-footer__link">Trabaja con nosotros</a></li>
+              <li><a href="#" class="ml-footer__link">Términos y condiciones</a></li>
+              <li><a href="#" class="ml-footer__link">Cómo cuidamos tu privacidad</a></li>
+              <li><a href="#" class="ml-footer__link">Blog</a></li>
+              <li><a href="https://www.sic.gov.co" target="_blank" class="ml-footer__link">
+                <i class="fa-solid fa-arrow-up-right-from-square fa-xs me-1"></i>SIC.gov.co
+              </a></li>
+              <li><a href="#" class="ml-footer__link">Accesibilidad</a></li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Bloque 4: Redes sociales ── -->
+  <div class="ml-footer__social">
+    <div class="container-fluid justify-content-center">
+      <div class="ml-footer__section-inner d-flex flex-wrap align-items-center justify-content-between gap-3">
+        <div class="d-flex align-items-center gap-3">
+          <span class="ml-footer__social-title">Síguenos:</span>
+          <a href="#" class="ml-footer__social-btn" title="Facebook" aria-label="Facebook">
+            <i class="fa-brands fa-facebook-f"></i>
+          </a>
+          <a href="#" class="ml-footer__social-btn" title="Instagram" aria-label="Instagram">
+            <i class="fa-brands fa-instagram"></i>
+          </a>
+          <a href="#" class="ml-footer__social-btn" title="Twitter / X" aria-label="Twitter">
+            <i class="fa-brands fa-x-twitter"></i>
+          </a>
+          <a href="#" class="ml-footer__social-btn" title="YouTube" aria-label="YouTube">
+            <i class="fa-brands fa-youtube"></i>
+          </a>
+          <a href="#" class="ml-footer__social-btn" title="TikTok" aria-label="TikTok">
+            <i class="fa-brands fa-tiktok"></i>
+          </a>
+        </div>
+        <!-- Descarga la app -->
+        <div class="d-flex align-items-center gap-2">
+          <span class="ml-footer__social-title">Descarga la app:</span>
+          <a href="#" class="ml-footer__app-btn" title="App Store">
+            <i class="fa-brands fa-apple me-1"></i> App Store
+          </a>
+          <a href="#" class="ml-footer__app-btn" title="Google Play">
+            <i class="fa-brands fa-google-play me-1"></i> Google Play
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Bloque 5: Legal / Copyright ── -->
+  <div class="ml-footer__legal">
+    <div class="container-fluid justify-content-center">
+      <div class="ml-footer__section-inner d-flex flex-wrap align-items-center justify-content-between gap-2">
+        <span class="ml-footer__legal-text">
+          Copyright &copy; {{ currentYear }} MercadoLibre Colombia LTDA. — Calle 100 #7-33, Torre I, Piso 16, Bogotá D.C.
+        </span>
+        <span class="ml-footer__legal-text">
+          <i class="fa-solid fa-shield-halved me-1 text-success"></i>
+          Sitio seguro · SSL
+        </span>
+      </div>
+    </div>
+  </div>
+
+</footer>

@@ -1,1 +1,52 @@
-<p>actualizarproductocomponent works!</p>
+<div class="ml-form-page py-5">
+  <div class="container ml-form-container bg-white p-4 p-md-5 rounded shadow-sm">
+    <div class="d-flex align-items-center mb-4 gap-3">
+      <button class="btn btn-light rounded-circle" routerLink="/listar-producto"><i class="fa-solid fa-arrow-left"></i></button>
+      <h2 class="fw-bold text-dark m-0">Modificar publicación</h2>
+    </div>
+    
+    <form (ngSubmit)="onSubmit()" #productoForm="ngForm">
+      
+      <!-- Nombre -->
+      <div class="mb-4">
+        <label for="nombre" class="form-label fw-semibold">Título de tu publicación <span class="text-danger">*</span></label>
+        <input type="text" class="form-control form-control-lg ml-input" id="nombre" name="nombre" [(ngModel)]="producto.nombre" required>
+      </div>
+
+      <!-- Precio y Categoría -->
+      <div class="row mb-4">
+        <div class="col-md-6 mb-4 mb-md-0">
+          <label for="precio" class="form-label fw-semibold">Precio (COP) <span class="text-danger">*</span></label>
+          <div class="input-group">
+            <span class="input-group-text bg-light">$</span>
+            <input type="number" class="form-control form-control-lg ml-input" id="precio" name="precio" [(ngModel)]="producto.precio" required min="0">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label for="categoria" class="form-label fw-semibold">Categoría <span class="text-danger">*</span></label>
+          <select class="form-select form-select-lg ml-input" id="categoria" name="categoria" [(ngModel)]="producto.categoria" required>
+            <option value="Tecnología">Tecnología</option>
+            <option value="Hogar">Hogar</option>
+            <option value="Vehículos">Vehículos</option>
+            <option value="Deportes">Deportes</option>
+            <option value="Moda">Moda</option>
+            <option value="Otros">Otros</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Descripción -->
+      <div class="mb-4">
+        <label for="descripcion" class="form-label fw-semibold">Descripción <span class="text-danger">*</span></label>
+        <textarea class="form-control ml-input" id="descripcion" name="descripcion" [(ngModel)]="producto.descripcion" required rows="4"></textarea>
+      </div>
+
+      <!-- Botones -->
+      <div class="d-flex gap-3 justify-content-end mt-5">
+        <button type="button" class="btn btn-link text-decoration-none fw-semibold text-secondary" routerLink="/listar-producto">Cancelar</button>
+        <button type="submit" class="btn btn-primary btn-lg ml-btn-primary px-5 fw-bold" [disabled]="!productoForm.valid">Guardar cambios</button>
+      </div>
+
+    </form>
+  </div>
+</div>

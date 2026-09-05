@@ -1,0 +1,246 @@
+/* =============================================
+   NAVBAR – MERCADO LIBRE COLOMBIA STYLE
+   Todos los colores sólidos en formato RGB.
+   NOTA: no se usa :root con var() porque el
+   ViewEncapsulation de Angular impide que las
+   variables de :root en un componente sean
+   globales -> el fondo quedaba transparente.
+   ============================================= */
+
+.ml-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+  display: block;
+  width: 100%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  background-color: rgb(255, 230, 0);
+  font-family: 'Proxima Nova', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+/* ── Fila SUPERIOR (amarilla) ── */
+.ml-navbar__top {
+  background-color: rgb(255, 230, 0);
+  padding: 10px 24px;
+}
+
+.ml-navbar__inner {
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+/* Logo */
+.ml-navbar__logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.ml-navbar__logo-img {
+  height: 36px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* Barra de búsqueda */
+.ml-navbar__search {
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid rgb(224, 224, 224);
+  max-width: 680px;
+  background-color: rgb(255, 255, 255);
+}
+
+.ml-navbar__search-input {
+  border: none;
+  border-radius: 0;
+  padding: 8px 14px;
+  font-size: 14px;
+  outline: none;
+  box-shadow: none !important;
+  height: 40px;
+}
+
+.ml-navbar__search-input:focus {
+  border: none;
+  box-shadow: none;
+}
+
+.ml-navbar__search-btn {
+  background-color: rgb(229, 229, 229);
+  border: none;
+  border-left: 1px solid rgb(224, 224, 224);
+  border-radius: 0;
+  padding: 0 16px;
+  height: 40px;
+  font-size: 16px;
+  color: rgb(51, 51, 51);
+  transition: background-color 0.15s;
+}
+
+.ml-navbar__search-btn:hover {
+  background-color: rgb(208, 208, 208);
+}
+
+/* Ubicación – ESTÁTICO (no clickeable) */
+.ml-navbar__location {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: rgb(255, 230, 0);
+  color: rgb(51, 51, 51);
+  font-size: 13px;
+  line-height: 1.3;
+  padding: 4px 8px;
+  border-radius: 4px;
+  min-width: 120px;
+  cursor: default;
+  user-select: none;
+}
+
+.ml-navbar__location i {
+  font-size: 18px;
+  color: rgb(51, 51, 51);
+  flex-shrink: 0;
+}
+
+.ml-navbar__location-text {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+/* Info de usuario – ESTÁTICO */
+.ml-navbar__user-info {
+  color: rgb(51, 51, 51);
+  font-size: 13px;
+  line-height: 1.4;
+  cursor: default;
+  user-select: none;
+}
+
+/* Acciones de usuario */
+.ml-navbar__actions {
+  color: rgb(51, 51, 51);
+}
+
+/* Carrito – sí es clickeable */
+.ml-navbar__cart {
+  color: rgb(51, 51, 51);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.ml-navbar__cart:hover {
+  color: rgb(26, 58, 92);
+}
+
+.ml-navbar__cart-badge {
+  background-color: rgb(52, 131, 250);
+  color: rgb(255, 255, 255);
+  font-size: 10px;
+  padding: 2px 5px;
+  min-width: 18px;
+}
+
+/* ── Fila INFERIOR (blanca) ── */
+.ml-navbar__bottom {
+  background-color: rgb(255, 255, 255);
+  border-top: 1px solid rgb(224, 224, 224);
+  padding: 0 24px;
+}
+
+.ml-navbar__nav-inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: none;
+}
+
+.ml-navbar__nav-inner::-webkit-scrollbar {
+  display: none;
+}
+
+/* Botón de categorías */
+.ml-navbar__nav-btn {
+  background-color: rgb(255, 255, 255);
+  border: none;
+  color: rgb(51, 51, 51);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px 8px;
+  transition: color 0.15s;
+}
+
+.ml-navbar__nav-btn:hover,
+.ml-navbar__nav-btn:focus {
+  color: rgb(52, 131, 250);
+  background-color: rgb(255, 255, 255);
+  box-shadow: none;
+}
+
+.ml-navbar__nav-btn::after {
+  font-size: 10px;
+  vertical-align: middle;
+}
+
+/* Links de navegación */
+.ml-navbar__nav-link {
+  color: rgb(51, 51, 51);
+  text-decoration: none;
+  font-size: 13px;
+  padding: 10px 8px;
+  display: inline-block;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.ml-navbar__nav-link:hover {
+  color: rgb(52, 131, 250);
+  border-bottom-color: rgb(52, 131, 250);
+}
+
+/* Divisor vertical */
+.ml-navbar__divider {
+  width: 1px;
+  height: 18px;
+  background-color: rgb(224, 224, 224);
+}
+
+/* Dropdown de categorías */
+.ml-navbar__dropdown {
+  min-width: 240px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgb(224, 224, 224);
+  border-radius: 4px;
+  padding: 8px 0;
+  background-color: rgb(255, 255, 255);
+}
+
+.ml-navbar__dropdown .dropdown-item {
+  font-size: 14px;
+  padding: 8px 20px;
+  color: rgb(51, 51, 51);
+  transition: background 0.12s;
+}
+
+.ml-navbar__dropdown .dropdown-item:hover {
+  background-color: rgb(255, 249, 224);
+  color: rgb(26, 58, 92);
+}
+
+/* ── Responsive ── */
+@media (max-width: 576px) {
+  .ml-navbar__top {
+    padding: 8px 12px;
+  }
+
+  .ml-navbar__logo-img {
+    height: 28px;
+  }
+
+  .ml-navbar__search-btn {
+    padding: 0 10px;
+  }
+}

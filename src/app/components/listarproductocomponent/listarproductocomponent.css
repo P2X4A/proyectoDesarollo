@@ -1,0 +1,30 @@
+.ml-list-page {
+  background-color: rgb(235, 235, 235);
+  min-height: calc(100vh - 200px);
+}
+
+.ml-list-container {
+  max-width: 1000px;
+}
+
+.ml-btn-primary {
+  background-color: rgb(52, 131, 250);
+  border-color: rgb(52, 131, 250);
+}
+
+.ml-btn-primary:hover {
+  background-color: rgb(26, 111, 219);
+  border-color: rgb(26, 111, 219);
+}
+
+.ml-action-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.table > :not(caption) > * > * {
+  padding: 1rem 0.5rem;
+}

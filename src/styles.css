@@ -1,1 +1,19 @@
-/* You can add global styles to this file, and also import other style files */
+/* Estilos globales — fondo gris ML y reset mínimo. */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background-color: rgb(235, 235, 235);
+}
+
+body {
+  font-family: 'Proxima Nova', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+main {
+  display: block;
+}
+
+img {
+  max-width: 100%;
+}

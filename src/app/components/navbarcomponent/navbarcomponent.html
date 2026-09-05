@@ -1,1 +1,169 @@
-<p>navbarcomponent works!</p>
+<!-- ===== NAVBAR MERCADO LIBRE COLOMBIA ===== -->
+<nav class="ml-navbar animate__animated animate__fadeInDown">
+
+  <!-- ── Fila superior: logo + búsqueda + acciones ── -->
+  <div class="container-fluid justify-content-center ml-navbar__top">
+    <div class="d-flex align-items-center w-100 gap-3 ml-navbar__inner">
+
+      <!-- Logo (clickeable → Home) -->
+      <a routerLink="/" class="ml-navbar__logo flex-shrink-0" title="Mercado Libre Colombia">
+        <img
+          src="https://http2.mlstatic.com/frontend-assets/ml-web-navigation/ui-navigation/6.6.74/mercadolibre/logo__large_plus@2x.png"
+          alt="Mercado Libre"
+          class="ml-navbar__logo-img"
+        />
+      </a>
+
+      <!-- Barra de búsqueda -->
+      <form
+        class="ml-navbar__search flex-grow-1 d-flex"
+        (ngSubmit)="onSearch()"
+        role="search"
+      >
+        <label for="ml-search-input" class="visually-hidden">Buscar productos</label>
+        <input
+          id="ml-search-input"
+          type="text"
+          class="form-control ml-navbar__search-input"
+          placeholder="Buscar productos, marcas y más…"
+          [(ngModel)]="searchQuery"
+          name="searchQuery"
+          autocomplete="off"
+          aria-label="Buscar productos, marcas y más"
+        />
+        <button type="submit" class="btn ml-navbar__search-btn" aria-label="Buscar">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </form>
+
+      <!-- Ubicación – ESTÁTICO (no clickeable) -->
+      <div
+        class="ml-navbar__location d-none d-lg-flex flex-shrink-0"
+        title="Ubicación de entrega"
+      >
+        <i class="fa-solid fa-location-dot"></i>
+        <span class="ml-navbar__location-text">
+          <small>Enviar a</small>
+          <strong>{{ ubicacion }}</strong>
+        </span>
+      </div>
+
+      <!-- Acciones de usuario -->
+      <div class="ml-navbar__actions d-flex align-items-center gap-3 flex-shrink-0">
+
+        <!-- Crea tu cuenta / Ingresa – ESTÁTICOS -->
+        <div class="d-none d-md-flex flex-column align-items-start lh-1 ml-navbar__user-info">
+          <small>Crea tu cuenta</small>
+          <span class="fw-semibold text-nowrap">Ingresa</span>
+        </div>
+
+        <!-- Mis compras – ESTÁTICO -->
+        <span class="ml-navbar__user-info d-none d-lg-block text-nowrap">
+          Mis compras
+        </span>
+
+        <!-- Carrito – CLICKEABLE -->
+        <a
+          routerLink="/listar-producto"
+          class="ml-navbar__cart position-relative"
+          title="Carrito de compras"
+        >
+          <i class="fa-solid fa-cart-shopping fa-lg"></i>
+          <span
+            class="position-absolute top-0 start-100 translate-middle badge rounded-pill ml-navbar__cart-badge"
+            *ngIf="cartCount > 0"
+          >
+            {{ cartCount }}
+          </span>
+        </a>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Fila inferior: navegación secundaria ── -->
+  <div class="container-fluid justify-content-center ml-navbar__bottom">
+    <div class="d-flex align-items-center gap-3 ml-navbar__nav-inner">
+
+      <!-- Categorías dropdown -->
+      <div class="dropdown">
+        <button
+          class="btn ml-navbar__nav-btn dropdown-toggle"
+          type="button"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          <i class="fa-solid fa-bars me-1"></i>Categorías
+        </button>
+        <ul class="dropdown-menu ml-navbar__dropdown">
+          <li>
+            <a class="dropdown-item" routerLink="/categoria">
+              <i class="fa-solid fa-mobile-screen me-2 text-warning"></i>Electrónica
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item" routerLink="/categoria">
+              <i class="fa-solid fa-shirt me-2 text-warning"></i>Ropa y accesorios
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item" routerLink="/categoria">
+              <i class="fa-solid fa-house me-2 text-warning"></i>Hogar y jardín
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item" routerLink="/categoria">
+              <i class="fa-solid fa-dumbbell me-2 text-warning"></i>Deportes
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item" routerLink="/categoria">
+              <i class="fa-solid fa-car me-2 text-warning"></i>Vehículos
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item" routerLink="/categoria">
+              <i class="fa-solid fa-gamepad me-2 text-warning"></i>Videojuegos
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item" routerLink="/categoria">
+              <i class="fa-solid fa-screwdriver-wrench me-2 text-warning"></i>Herramientas
+            </a>
+          </li>
+          <li><hr class="dropdown-divider" /></li>
+          <li>
+            <a class="dropdown-item fw-semibold" routerLink="/categoria">
+              Ver todas las categorías
+              <i class="fa-solid fa-arrow-right ms-1"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <span class="ml-navbar__divider d-none d-md-block"></span>
+
+      <a class="ml-navbar__nav-link d-none d-md-block text-nowrap" routerLink="/">
+        Ofertas
+      </a>
+
+      <a class="ml-navbar__nav-link d-none d-lg-block text-nowrap" routerLink="/listar-producto">
+        Historial
+      </a>
+
+      <a class="ml-navbar__nav-link d-none d-lg-block text-nowrap" routerLink="/mercado-play">
+        <i class="fa-solid fa-play me-1"></i>Mercado Play
+      </a>
+
+      <a class="ml-navbar__nav-link fw-semibold text-nowrap" routerLink="/crear-producto">
+        Vender
+      </a>
+
+      <a class="ml-navbar__nav-link text-nowrap" routerLink="/">
+        Ayuda
+      </a>
+
+    </div>
+  </div>
+
+</nav>

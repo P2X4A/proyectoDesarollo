@@ -1,0 +1,21 @@
+.ml-categories-page {
+  background-color: rgb(235, 235, 235);
+  min-height: calc(100vh - 200px);
+}
+
+.ml-cat-card {
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  border: 1px solid rgb(224, 224, 224);
+}
+
+.ml-cat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1) !important;
+  border-color: rgb(52, 131, 250);
+}
+
+.ml-cat-img-wrapper {
+  width: 80px;
+  height: 80px;
+}

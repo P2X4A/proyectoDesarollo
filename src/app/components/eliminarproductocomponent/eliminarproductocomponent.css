@@ -1,0 +1,8 @@
+.ml-delete-page {
+  background-color: rgb(235, 235, 235);
+  min-height: calc(100vh - 200px);
+}
+
+.ml-delete-container {
+  max-width: 600px;
+}

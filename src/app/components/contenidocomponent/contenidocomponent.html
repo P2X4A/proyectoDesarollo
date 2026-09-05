@@ -1,1 +1,129 @@
-<p>contenidocomponent works!</p>
+<main class="ml-home">
+  <!-- Carrusel / Hero Banner -->
+  <div class="ml-carousel">
+    <div
+      class="ml-carousel-slide animate__animated animate__fadeIn"
+      [style.backgroundColor]="banners[carouselIndex].bgColor"
+      [style.color]="banners[carouselIndex].textColor"
+    >
+      <div class="ml-carousel-content container-fluid">
+        <div class="row align-items-center justify-content-between h-100 px-4 px-md-5">
+          <div class="col-12 col-md-6 text-center text-md-start">
+            <h2 class="display-4 fw-bold mb-3">{{ banners[carouselIndex].titulo }}</h2>
+            <p class="fs-5 mb-4">{{ banners[carouselIndex].subtitulo }}</p>
+            <button class="btn btn-dark btn-lg px-4">{{ banners[carouselIndex].cta }}</button>
+          </div>
+          <div class="col-12 col-md-5 text-center d-none d-md-block">
+            <img
+              [src]="banners[carouselIndex].imagen"
+              [alt]="banners[carouselIndex].titulo"
+              class="img-fluid rounded shadow"
+              style="max-height: 240px; width: 100%; object-fit: cover;"
+              loading="lazy"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Controles de Carrusel -->
+    <button class="ml-carousel-control prev" (click)="prevBanner()">
+      <i class="fa-solid fa-chevron-left"></i>
+    </button>
+    <button class="ml-carousel-control next" (click)="nextBanner()">
+      <i class="fa-solid fa-chevron-right"></i>
+    </button>
+    <!-- Indicadores -->
+    <div class="ml-carousel-indicators">
+      <span
+        *ngFor="let b of banners; let i = index"
+        class="indicator"
+        [class.active]="i === carouselIndex"
+        (click)="goToBanner(i)"
+      ></span>
+    </div>
+  </div>
+
+  <!-- Sección: Mercado Play / Atajo -->
+  <div class="container-fluid mt-5 mb-4 ml-max-width">
+    <div class="d-flex align-items-center p-3 rounded shadow-sm bg-white border">
+      <i class="fa-solid fa-play fa-2x ms-2 me-3" style="color: rgb(52, 131, 250)"></i>
+      <div>
+        <h5 class="mb-0 fw-bold">Mercado Play</h5>
+        <span class="text-muted">Disfruta de películas y series gratis.</span>
+      </div>
+      <button class="btn btn-outline-primary ms-auto me-2" routerLink="/mercado-play">Ver ahora</button>
+    </div>
+  </div>
+
+  <!-- Categorías Destacadas -->
+  <div class="container-fluid mb-5 ml-max-width">
+    <div class="row g-3 text-center">
+      <div class="col-6 col-sm-4 col-md-3" *ngFor="let cat of categoriasDestacadas">
+        <a routerLink="/categoria" class="text-decoration-none">
+          <div class="ml-category-card p-4 rounded bg-white shadow-sm h-100 d-flex flex-column align-items-center justify-content-center">
+            <i [class]="cat.icono + ' fa-3x mb-3'" [style.color]="cat.color"></i>
+            <span class="fw-semibold text-dark">{{ cat.nombre }}</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ofertas del Día -->
+  <div class="container-fluid mb-5 ml-max-width">
+    <h3 class="fw-semibold mb-4 text-dark">Ofertas del día <a routerLink="/" class="text-primary fs-6 fw-normal ms-3 text-decoration-none">Ver todas</a></h3>
+    
+    <div *ngIf="isLoadingOfertas" class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando ofertas...</span>
+      </div>
+      <p class="mt-3 text-muted">Cargando mejores productos...</p>
+    </div>
+
+    <div class="row g-3" *ngIf="!isLoadingOfertas">
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3" *ngFor="let oferta of ofertas">
+        <div class="card h-100 border-0 shadow-sm ml-product-card">
+          <div class="position-relative text-center p-3 bg-white" style="height: 200px;">
+            <img [src]="oferta.imagen" class="img-fluid h-100" style="object-fit: contain;" alt="{{ oferta.nombre }}">
+            <span class="position-absolute top-0 end-0 badge bg-danger m-2 p-2">-{{ oferta.descuento }}%</span>
+          </div>
+          <div class="card-body d-flex flex-column border-top">
+            <small class="text-muted text-decoration-line-through">{{ formatPrice(oferta.precioOriginal) }}</small>
+            <div class="d-flex align-items-center mb-2">
+              <span class="fs-4 fw-bold me-2">{{ formatPrice(oferta.precio) }}</span>
+              <span *ngIf="oferta.envioGratis" class="text-success small fw-semibold"><i class="fa-solid fa-bolt me-1"></i>Envío gratis</span>
+            </div>
+            <p class="card-text text-muted mb-2 lh-sm ml-product-title">{{ oferta.nombre }}</p>
+            <div class="mt-auto d-flex align-items-center">
+              <div class="text-warning small me-2">
+                <i class="fa-solid fa-star" *ngFor="let star of getStars(oferta.calificacion)"></i>
+              </div>
+              <small class="text-muted">({{ oferta.vendidos }})</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Búsquedas Populares -->
+  <div class="container-fluid mb-5 ml-max-width">
+    <h3 class="fw-semibold mb-4 text-dark text-center">Búsquedas populares</h3>
+    <div class="d-flex flex-wrap justify-content-center gap-2">
+      <span *ngFor="let b of busquedasPopulares; let idx = index" class="badge rounded-pill bg-white text-dark border p-2 px-3 fw-normal">
+        {{ idx + 1 }}. {{ b }}
+      </span>
+    </div>
+  </div>
+
+  <!-- Índice Alfabético -->
+  <div class="container-fluid mb-5 ml-max-width text-center">
+    <h3 class="fw-semibold mb-4 text-dark">Buscar productos por inicial</h3>
+    <div class="d-flex flex-wrap justify-content-center gap-2">
+      <a routerLink="/" *ngFor="let letra of letras" class="btn btn-outline-secondary btn-sm rounded-circle ml-letter-btn">
+        {{ letra }}
+      </a>
+    </div>
+  </div>
+
+</main>

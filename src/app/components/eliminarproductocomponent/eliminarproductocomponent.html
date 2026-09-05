@@ -1,1 +1,16 @@
-<p>eliminarproductocomponent works!</p>
+<div class="ml-delete-page py-5 d-flex align-items-center justify-content-center">
+  <div class="container ml-delete-container bg-white p-4 p-md-5 rounded shadow-sm text-center">
+    <div class="mb-4 text-danger">
+      <i class="fa-solid fa-triangle-exclamation fa-4x"></i>
+    </div>
+    <h3 class="fw-bold text-dark mb-3">¿Estás seguro de que quieres eliminar esta publicación?</h3>
+    <p class="text-muted fs-5 mb-5">
+      Estás a punto de eliminar <strong>"{{ producto.nombre }}"</strong>.<br>Esta acción no se puede deshacer.
+    </p>
+
+    <div class="d-flex gap-3 justify-content-center">
+      <button type="button" class="btn btn-light btn-lg fw-semibold px-4 border" routerLink="/listar-producto">Cancelar</button>
+      <button type="button" class="btn btn-danger btn-lg px-4 fw-bold" (click)="onConfirmDelete()">Sí, eliminar</button>
+    </div>
+  </div>
+</div>

@@ -1,1 +1,16 @@
-<p>categoriascomponent works!</p>
+<div class="ml-categories-page">
+  <div class="container py-5">
+    <h2 class="mb-4 fw-bold">Categorías para explorar</h2>
+    
+    <div class="row g-4">
+      <div class="col-6 col-md-4 col-lg-3" *ngFor="let cat of categorias">
+        <div class="ml-cat-card p-3 rounded bg-white shadow-sm h-100 d-flex flex-column align-items-center text-center">
+          <div class="ml-cat-img-wrapper mb-3 rounded-circle d-flex align-items-center justify-content-center bg-light overflow-hidden shadow-sm">
+             <img [src]="cat.img" alt="{{ cat.nombre }}" class="w-100 h-100" style="object-fit: cover;">
+          </div>
+          <h6 class="fw-semibold text-dark mb-0">{{ cat.nombre }}</h6>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
