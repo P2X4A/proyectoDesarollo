@@ -14,6 +14,7 @@ import { Crearproductocomponent } from './components/crearproductocomponent/crea
 import { Actualizarproductocomponent } from './components/actualizarproductocomponent/actualizarproductocomponent';
 import { Listarproductocomponent } from './components/listarproductocomponent/listarproductocomponent';
 import { Eliminarproductocomponent } from './components/eliminarproductocomponent/eliminarproductocomponent';
+import { Carritocomponent } from './components/carritocomponent/carritocomponent';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { Eliminarproductocomponent } from './components/eliminarproductocomponen
     Actualizarproductocomponent,
     Listarproductocomponent,
     Eliminarproductocomponent,
+    Carritocomponent,
   ],
   imports: [BrowserModule, CommonModule, FormsModule, AppRoutingModule],
   providers: [
