@@ -24,6 +24,8 @@ export class Listarproductocomponent implements OnInit {
   private cartService = inject(CartService);
 
   productos: ProductoVista[] = [];
+  productosFiltrados: ProductoVista[] = [];
+  terminoBusqueda: string = '';
   isLoading: boolean = true;
 
   ngOnInit() {
@@ -42,6 +44,7 @@ export class Listarproductocomponent implements OnInit {
           estado: 'Activo', // Simulamos estado
           imagen: prod.image,
         }));
+        this.productosFiltrados = this.productos;
         this.isLoading = false;
       },
       error: (err) => {
@@ -63,4 +66,10 @@ export class Listarproductocomponent implements OnInit {
     };
     this.cartService.agregarProducto(producto);
   }
+
+  filtrarProducto(): void{
+    const q = this.terminoBusqueda.trim().toLowerCase();
+    this.productosFiltrados = this.productos.filter(p => p.nombre.toLowerCase().includes(q));
+  }
+
 }
