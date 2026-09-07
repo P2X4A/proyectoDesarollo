@@ -2,7 +2,7 @@ import { NgModule, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { provideHttpClient } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing-module';
 import { App } from './app';
 import { Navbarcomponent } from './components/navbarcomponent/navbarcomponent';
@@ -15,6 +15,8 @@ import { Actualizarproductocomponent } from './components/actualizarproductocomp
 import { Listarproductocomponent } from './components/listarproductocomponent/listarproductocomponent';
 import { Eliminarproductocomponent } from './components/eliminarproductocomponent/eliminarproductocomponent';
 import { Carritocomponent } from './components/carritocomponent/carritocomponent';
+import { Miscomprascomponent } from './components/miscomprascomponent/miscomprascomponent';
+import { Buscarcomponent } from './components/buscarcomponent/buscarcomponent';
 
 @NgModule({
   declarations: [
@@ -29,8 +31,10 @@ import { Carritocomponent } from './components/carritocomponent/carritocomponent
     Listarproductocomponent,
     Eliminarproductocomponent,
     Carritocomponent,
+    Miscomprascomponent,
+    Buscarcomponent,
   ],
-  imports: [BrowserModule, CommonModule, FormsModule, AppRoutingModule],
+  imports: [BrowserModule, CommonModule, FormsModule, ReactiveFormsModule, AppRoutingModule],
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideHttpClient()

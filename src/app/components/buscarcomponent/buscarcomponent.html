@@ -1,0 +1,61 @@
+<div class="ml-search-page py-5">
+  <div class="container ml-search-container">
+    <h2 class="fw-bold text-dark mb-1">
+      <i class="fa-solid fa-magnifying-glass text-primary me-2"></i>
+      <span *ngIf="query(); else sinTermino">Resultados para "{{ query() }}"</span>
+      <ng-template #sinTermino>Buscar productos</ng-template>
+    </h2>
+    <p class="text-muted mb-4" *ngIf="query()">
+      {{ resultados().length }} resultado(s) en el catálogo
+    </p>
+
+    <div *ngIf="store.loading()" class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Buscando...</span>
+      </div>
+      <p class="mt-3 text-muted">Buscando...</p>
+    </div>
+
+    <div *ngIf="!store.loading() && !query()" class="alert alert-info">
+      <i class="fa-solid fa-circle-info me-2"></i>
+      Escribe algo en el buscador superior para encontrar productos por título, categoría o descripción.
+    </div>
+
+    <div *ngIf="!store.loading() && query() && resultados().length === 0" class="text-center py-5 text-muted">
+      <i class="fa-solid fa-magnifying-glass fa-4x mb-3 text-light"></i>
+      <h5>Sin resultados para "{{ query() }}"</h5>
+      <p>Prueba con otras palabras o explora las ofertas.</p>
+      <button class="btn btn-primary mt-2" routerLink="/"><i class="fa-solid fa-house me-1"></i>Volver al inicio</button>
+    </div>
+
+    <div class="row g-3" *ngIf="!store.loading() && resultados().length > 0">
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3" *ngFor="let prod of resultados()">
+        <div class="card h-100 border-0 shadow-sm ml-product-card">
+          <div class="text-center p-3 bg-white" style="height: 200px;">
+            <img [src]="prod.image" class="img-fluid h-100" style="object-fit: contain;" [alt]="prod.title" loading="lazy">
+          </div>
+          <div class="card-body d-flex flex-column border-top">
+            <span class="fs-4 fw-bold mb-2">{{ formatPrice(prod.price) }}</span>
+            <p class="card-text text-muted mb-2 lh-sm ml-product-title">{{ prod.title }}</p>
+            <small class="text-muted mb-2"><i class="fa-solid fa-folder fa-xs me-1"></i>{{ prod.category }}</small>
+            <button
+              class="btn btn-sm w-100 mt-auto"
+              [ngClass]="agregados.has(prod.id) ? 'btn-success' : 'btn-primary'"
+              (click)="agregarAlCarrito(prod.id)"
+            >
+              <i class="fa-solid" [ngClass]="agregados.has(prod.id) ? 'fa-check' : 'fa-cart-plus'"></i>
+              {{ agregados.has(prod.id) ? '¡Agregado!' : 'Agregar al carrito' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="store.error() && !store.loading()" class="alert alert-warning mt-3">
+      <i class="fa-solid fa-triangle-exclamation me-2"></i>{{ store.error() }}
+      <button class="btn btn-sm btn-outline-secondary ms-3" (click)="recargar()">
+        <i class="fa-solid fa-rotate-right me-1"></i>Reintentar
+      </button>
+    </div>
+  </div>
+</div>

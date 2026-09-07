@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { CartService } from '../../services/cart.service';
 
 @Component({
@@ -17,7 +18,10 @@ export class Navbarcomponent implements OnInit {
   /** Cantidad de ítems en el carrito (en vivo desde CartService) */
   cartCount: number = 0;
 
-  constructor(private cartService: CartService) {}
+  constructor(
+    private cartService: CartService,
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {
     this.cartService.carrito$.subscribe(() => {
@@ -25,11 +29,11 @@ export class Navbarcomponent implements OnInit {
     });
   }
 
-  /** Ejecuta la búsqueda */
+  /** Ejecuta la búsqueda (navega a /buscar?q= para URL compartible) */
   onSearch(): void {
-    if (this.searchQuery.trim()) {
-      console.log('Buscando:', this.searchQuery);
-      // TODO: navegar a /listar-producto?q=searchQuery
+    const term = this.searchQuery.trim();
+    if (term) {
+      this.router.navigate(['/buscar'], { queryParams: { q: term } });
     }
   }
 }

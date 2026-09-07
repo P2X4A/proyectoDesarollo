@@ -1,0 +1,57 @@
+<div class="ml-orders-page py-5">
+  <div class="container ml-orders-container bg-white p-4 p-md-5 rounded shadow-sm animate__animated animate__fadeIn">
+    <h2 class="fw-bold text-dark mb-1"><i class="fa-solid fa-bag-shopping text-primary me-2"></i>Mis compras</h2>
+    <p class="text-muted mb-4">Historial de pedidos confirmados en este dispositivo.</p>
+
+    <div *ngIf="pedidos.length === 0" class="text-center py-5 text-muted">
+      <i class="fa-solid fa-receipt fa-4x mb-3 text-light"></i>
+      <h5>Aún no tienes compras</h5>
+      <p>Cuando confirmes un pedido en el carrito, aparecerá aquí.</p>
+      <button class="btn btn-primary mt-2" routerLink="/"><i class="fa-solid fa-magnifying-glass me-1"></i>Explorar ofertas</button>
+    </div>
+
+    <div class="accordion" id="pedidosAccordion" *ngIf="pedidos.length > 0">
+      <div class="accordion-item mb-3 rounded border" *ngFor="let pedido of pedidos; let i = index">
+        <h2 class="accordion-header">
+          <button
+            class="accordion-button"
+            [ngClass]="{ 'collapsed': i !== 0 }"
+            type="button"
+            data-bs-toggle="collapse"
+            [attr.data-bs-target]="'#pedido-' + pedido.id"
+            [attr.aria-expanded]="i === 0"
+          >
+            <span class="fw-semibold me-3">Pedido #{{ pedido.id }}</span>
+            <span class="badge bg-info text-dark me-3">{{ pedido.estado }}</span>
+            <span class="text-muted small me-3">{{ pedido.fecha | date:'mediumDate' }}</span>
+            <strong class="ms-auto">{{ formatPrice(pedido.total) }}</strong>
+          </button>
+        </h2>
+        <div [id]="'pedido-' + pedido.id" class="accordion-collapse collapse" [ngClass]="{ 'show': i === 0 }" data-bs-parent="#pedidosAccordion">
+          <div class="accordion-body">
+            <div class="d-flex align-items-center gap-3 mb-3 pb-3 border-bottom" *ngFor="let item of pedido.items">
+              <img [src]="item.producto.image" [alt]="item.producto.title" style="width: 50px; height: 50px; object-fit: contain;">
+              <div class="flex-grow-1">
+                <p class="mb-0 fw-semibold">{{ item.producto.title }}</p>
+                <small class="text-muted">Cantidad: {{ item.cantidad }}</small>
+              </div>
+              <strong>{{ formatPrice(item.producto.price * item.cantidad) }}</strong>
+            </div>
+            <div class="row text-muted small">
+              <div class="col-md-6">
+                <p class="mb-1"><i class="fa-solid fa-user me-1"></i>{{ pedido.nombre }}</p>
+                <p class="mb-1"><i class="fa-solid fa-location-dot me-1"></i>{{ pedido.direccion }}</p>
+                <p class="mb-1"><i class="fa-solid fa-phone me-1"></i>{{ pedido.telefono }}</p>
+              </div>
+              <div class="col-md-6 text-md-end">
+                <p class="mb-1">Subtotal: {{ formatPrice(pedido.subtotal) }}</p>
+                <p class="mb-1">Envío: {{ formatPrice(pedido.envio) }}</p>
+                <p class="mb-1">Entrega estimada: {{ pedido.fechaEstimadaEntrega | date:'longDate' }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

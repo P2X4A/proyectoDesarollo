@@ -5,7 +5,57 @@
       <i class="fa-solid fa-play fa-4x mb-3 text-info"></i>
       <h1 class="display-4 fw-bold">Mercado Play</h1>
       <p class="fs-5"><i class="fa-solid fa-ticket me-1"></i>Disfruta del mejor entretenimiento sin costo adicional.</p>
-      <button class="btn btn-info btn-lg mt-3 text-dark fw-bold px-5 rounded-pill"><i class="fa-regular fa-circle-play me-2"></i>Explorar Catálogo</button>
+      <!-- Buscador con debounce (400ms): no dispara por cada tecla -->
+      <div class="input-group input-group-lg mt-4 mx-auto" style="max-width: 560px;">
+        <span class="input-group-text bg-white border-end-0"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
+        <input
+          type="search"
+          class="form-control border-start-0"
+          placeholder="Buscar películas... (ej: Batman)"
+          [formControl]="searchControl"
+          aria-label="Buscar películas"
+        >
+      </div>
+    </div>
+  </div>
+
+  <!-- Ficha de detalle -->
+  <div class="container pt-4" *ngIf="isLoadingDetalle || detalle || errorDetalle">
+    <div *ngIf="isLoadingDetalle" class="text-center py-4">
+      <div class="spinner-border text-info" role="status">
+        <span class="visually-hidden">Cargando detalle...</span>
+      </div>
+      <p class="mt-2 mb-0">Cargando ficha...</p>
+    </div>
+
+    <div *ngIf="errorDetalle && !isLoadingDetalle" class="alert alert-danger">
+      <i class="fa-solid fa-circle-exclamation me-2"></i>{{ errorDetalle }}
+    </div>
+
+    <div *ngIf="detalle && !isLoadingDetalle" class="card bg-dark text-white border-secondary mb-2 animate__animated animate__fadeIn">
+      <div class="row g-0">
+        <div class="col-md-3 text-center p-3">
+          <img [src]="detalle.Poster !== 'N/A' ? detalle.Poster : posterDe(detalle)" [alt]="detalle.Title" class="img-fluid rounded" style="max-height: 320px;">
+        </div>
+        <div class="col-md-9">
+          <div class="card-body">
+            <div class="d-flex align-items-start gap-2">
+              <h3 class="card-title fw-bold mb-1">{{ detalle.Title }}</h3>
+              <button class="btn btn-sm btn-outline-light ms-auto rounded-circle" (click)="cerrarDetalle()" aria-label="Cerrar detalle">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+            <p class="text-secondary mb-2">
+              <span class="badge bg-info text-dark me-2"><i class="fa-solid fa-star me-1"></i>{{ detalle.imdbRating }}</span>
+              {{ detalle.Year }} · {{ detalle.Runtime }} · {{ detalle.Rated }}
+            </p>
+            <p class="mb-2">{{ detalle.Plot }}</p>
+            <p class="mb-1 small"><i class="fa-solid fa-film me-1 text-info"></i><strong>Género:</strong> {{ detalle.Genre }}</p>
+            <p class="mb-1 small"><i class="fa-solid fa-clapperboard me-1 text-info"></i><strong>Dirección:</strong> {{ detalle.Director }}</p>
+            <p class="mb-0 small"><i class="fa-solid fa-users me-1 text-info"></i><strong>Reparto:</strong> {{ detalle.Actors }}</p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -20,10 +70,22 @@
       <p class="mt-3">Cargando catálogo...</p>
     </div>
 
-    <!-- Lista de Películas -->
+    <div *ngIf="!isLoading && mensajeError && peliculas.length === 0" class="text-center py-5">
+      <i class="fa-solid fa-film fa-3x mb-3 text-secondary"></i>
+      <p class="mb-0">{{ mensajeError }}</p>
+    </div>
+
+    <!-- Lista de Películas (clic = ver detalle) -->
     <div class="row g-3" *ngIf="!isLoading && peliculas.length > 0">
       <div class="col-6 col-md-4 col-lg-2" *ngFor="let p of peliculas">
-        <div class="ml-movie-card position-relative rounded overflow-hidden shadow">
+        <div
+          class="ml-movie-card position-relative rounded overflow-hidden shadow"
+          (click)="verDetalle(p)"
+          (keyup.enter)="verDetalle(p)"
+          tabindex="0"
+          role="button"
+          [attr.aria-label]="'Ver detalle de ' + p.Title"
+        >
           <!-- OMDb devuelve "N/A" si no tiene póster: fallback a Picsum (sin copyright) -->
           <img [src]="posterDe(p)" alt="{{ p.Title }}" class="w-100" loading="lazy">
           <div class="ml-movie-overlay position-absolute top-0 start-0 w-100 h-100 d-flex flex-column align-items-center justify-content-center p-2 text-center">
@@ -33,12 +95,6 @@
           </div>
         </div>
       </div>
-    </div>
-
-    <!-- Estado vacío / error -->
-    <div *ngIf="!isLoading && peliculas.length === 0" class="text-center py-5">
-      <i class="fa-solid fa-film fa-3x mb-3 text-secondary"></i>
-      <p class="mb-0">{{ mensajeError || 'No hay películas para mostrar.' }}</p>
     </div>
   </div>
 </div>

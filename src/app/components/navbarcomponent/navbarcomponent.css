@@ -82,7 +82,7 @@
   background-color: rgb(208, 208, 208);
 }
 
-/* Ubicación – ESTÁTICO (no clickeable) */
+/* Ubicación – abre el modal informativo */
 .ml-navbar__location {
   display: flex;
   align-items: center;
@@ -94,8 +94,14 @@
   padding: 4px 8px;
   border-radius: 4px;
   min-width: 120px;
-  cursor: default;
+  cursor: pointer;
   user-select: none;
+  font-family: inherit;
+  text-align: left;
+}
+
+.ml-navbar__location:hover {
+  background-color: rgb(240, 216, 0);
 }
 
 .ml-navbar__location i {
@@ -242,5 +248,17 @@
 
   .ml-navbar__search-btn {
     padding: 0 10px;
+  }
+
+  /* En móvil: logo + acciones arriba, buscador a todo lo ancho debajo */
+  .ml-navbar__inner {
+    flex-wrap: wrap;
+    row-gap: 8px;
+  }
+
+  .ml-navbar__search {
+    order: 3;
+    flex-basis: 100%;
+    max-width: none;
   }
 }

@@ -15,6 +15,8 @@ export class Carritocomponent implements OnInit {
   envio = 8000;
   mostrarFormulario = false;
   pedidoConfirmado: Pedido | null = null;
+  /** Error de validación del checkout (reemplaza al alert nativo). */
+  checkoutError: string | null = null;
 
 //datos para el formulario de salida ( recibo)
   nombre = '';
@@ -61,10 +63,11 @@ export class Carritocomponent implements OnInit {
   }
 
   confirmarCompra(): void {
-    if (!this.nombre || !this.direccion || !this.telefono) {
-      alert('Completa tus datos antes de confirmar la compra.');
+    if (!this.nombre.trim() || !this.direccion.trim() || !this.telefono.trim()) {
+      this.checkoutError = 'Completa tus datos antes de confirmar la compra.';
       return;
     }
+    this.checkoutError = null;
 
     const hoy = new Date();
     const estimada = new Date(hoy);

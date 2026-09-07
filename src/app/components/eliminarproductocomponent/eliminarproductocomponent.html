@@ -3,14 +3,33 @@
     <div class="mb-4 text-danger">
       <i class="fa-solid fa-triangle-exclamation fa-4x"></i>
     </div>
+    <div *ngIf="isLoading" class="text-center py-4">
+      <div class="spinner-border text-danger" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+    </div>
+
+    <div *ngIf="!isLoading && errorMsg && !nombre" class="alert alert-danger">
+      <i class="fa-solid fa-circle-exclamation me-2"></i>{{ errorMsg }}
+    </div>
+
+    <div *ngIf="!isLoading && nombre">
     <h3 class="fw-bold text-dark mb-3">¿Estás seguro de que quieres eliminar esta publicación?</h3>
     <p class="text-muted fs-5 mb-5">
-      Estás a punto de eliminar <strong>"{{ producto.nombre }}"</strong>.<br>Esta acción no se puede deshacer.
+      Estás a punto de eliminar <strong>"{{ nombre }}"</strong>.<br>Esta acción no se puede deshacer.
     </p>
+
+    <div *ngIf="errorMsg" class="alert alert-danger">
+      <i class="fa-solid fa-circle-exclamation me-2"></i>{{ errorMsg }}
+    </div>
 
     <div class="d-flex gap-3 justify-content-center">
       <button type="button" class="btn btn-light btn-lg fw-semibold px-4 border" routerLink="/listar-producto">Cancelar</button>
-      <button type="button" class="btn btn-danger btn-lg px-4 fw-bold" (click)="onConfirmDelete()">Sí, eliminar</button>
+      <button type="button" class="btn btn-danger btn-lg px-4 fw-bold" (click)="onConfirmDelete()" [disabled]="isDeleting">
+        <span *ngIf="isDeleting" class="spinner-border spinner-border-sm me-2"></span>
+        {{ isDeleting ? 'Eliminando...' : 'Sí, eliminar' }}
+      </button>
+    </div>
     </div>
   </div>
 </div>

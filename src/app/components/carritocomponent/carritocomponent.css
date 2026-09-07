@@ -1,3 +1,19 @@
 .card img {
   border-radius: 6px;
 }
+
+/* ── Responsive: apila cada renglón en móvil ── */
+@media (max-width: 576px) {
+  .ml-cart-item {
+    flex-wrap: wrap;
+    row-gap: 12px;
+  }
+
+  .ml-cart-item-info {
+    flex: 1 1 100%;
+  }
+
+  .ml-cart-item-total {
+    margin-left: auto;
+  }
+}

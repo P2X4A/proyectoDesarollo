@@ -36,17 +36,20 @@
         </button>
       </form>
 
-      <!-- Ubicación – ESTÁTICO (no clickeable) -->
-      <div
-        class="ml-navbar__location d-none d-lg-flex flex-shrink-0"
+      <!-- Ubicación – abre modal informativo -->
+      <button
+        type="button"
+        class="ml-navbar__location d-none d-lg-flex flex-shrink-0 border-0"
         title="Ubicación de entrega"
+        data-bs-toggle="modal"
+        data-bs-target="#ubicacionModal"
       >
         <i class="fa-solid fa-location-dot"></i>
         <span class="ml-navbar__location-text">
           <small>Enviar a</small>
           <strong>{{ ubicacion }}</strong>
         </span>
-      </div>
+      </button>
 
       <!-- Acciones de usuario -->
       <div class="ml-navbar__actions d-flex align-items-center gap-3 flex-shrink-0">
@@ -57,10 +60,10 @@
           <span class="fw-semibold text-nowrap">Ingresa</span>
         </div>
 
-        <!-- Mis compras – ESTÁTICO -->
-        <span class="ml-navbar__user-info d-none d-lg-block text-nowrap">
+        <!-- Mis compras -->
+        <a routerLink="/mis-compras" class="ml-navbar__nav-link d-none d-lg-block text-nowrap">
           Mis compras
-        </span>
+        </a>
 
         <!-- Carrito – CLICKEABLE (badge en vivo desde CartService) -->
         <a
@@ -96,54 +99,54 @@
           <i class="fa-solid fa-bars me-1"></i>Categorías
         </button>
         <ul class="dropdown-menu ml-navbar__dropdown">
-          <!-- Categorías reales de mercadolibre.com.co -->
+          <!-- Categorías reales de mercadolibre.com.co (navegan a /categoria/:nombre) -->
           <li>
-            <a class="dropdown-item" routerLink="/categoria">
+            <a class="dropdown-item" [routerLink]="['/categoria', 'Vehículos']">
               <i class="fa-solid fa-car me-2 text-warning"></i>Vehículos
             </a>
           </li>
           <li>
-            <a class="dropdown-item" routerLink="/categoria">
+            <a class="dropdown-item" [routerLink]="['/categoria', 'Supermercado']">
               <i class="fa-solid fa-cart-shopping me-2 text-warning"></i>Supermercado
             </a>
           </li>
           <li>
-            <a class="dropdown-item" routerLink="/categoria">
+            <a class="dropdown-item" [routerLink]="['/categoria', 'Tecnología']">
               <i class="fa-solid fa-microchip me-2 text-warning"></i>Tecnología
             </a>
           </li>
           <li>
-            <a class="dropdown-item" routerLink="/categoria">
+            <a class="dropdown-item" [routerLink]="['/categoria', 'Farmacia']">
               <i class="fa-solid fa-prescription-bottle-medical me-2 text-warning"></i>Farmacia
             </a>
           </li>
           <li>
-            <a class="dropdown-item" routerLink="/categoria">
+            <a class="dropdown-item" [routerLink]="['/categoria', 'Electrodomésticos']">
               <i class="fa-solid fa-plug-circle-bolt me-2 text-warning"></i>Electrodomésticos
             </a>
           </li>
           <li>
-            <a class="dropdown-item" routerLink="/categoria">
+            <a class="dropdown-item" [routerLink]="['/categoria', 'Hogar y Muebles']">
               <i class="fa-solid fa-couch me-2 text-warning"></i>Hogar y Muebles
             </a>
           </li>
           <li>
-            <a class="dropdown-item" routerLink="/categoria">
+            <a class="dropdown-item" [routerLink]="['/categoria', 'Deportes y Fitness']">
               <i class="fa-solid fa-dumbbell me-2 text-warning"></i>Deportes y Fitness
             </a>
           </li>
           <li>
-            <a class="dropdown-item" routerLink="/categoria">
+            <a class="dropdown-item" [routerLink]="['/categoria', 'Mascotas']">
               <i class="fa-solid fa-paw me-2 text-warning"></i>Mascotas
             </a>
           </li>
           <li>
-            <a class="dropdown-item" routerLink="/categoria">
+            <a class="dropdown-item" [routerLink]="['/categoria', 'Moda']">
               <i class="fa-solid fa-shirt me-2 text-warning"></i>Moda
             </a>
           </li>
           <li>
-            <a class="dropdown-item" routerLink="/categoria">
+            <a class="dropdown-item" [routerLink]="['/categoria', 'Juegos y Juguetes']">
               <i class="fa-solid fa-gamepad me-2 text-warning"></i>Juegos y Juguetes
             </a>
           </li>
@@ -167,11 +170,11 @@
         <i class="fa-solid fa-ticket me-1"></i>Cupones
       </a>
 
-      <a class="ml-navbar__nav-link d-none d-lg-block text-nowrap" routerLink="/categoria">
+      <a class="ml-navbar__nav-link d-none d-lg-block text-nowrap" [routerLink]="['/categoria', 'Supermercado']">
         <i class="fa-solid fa-cart-shopping me-1"></i>Supermercado
       </a>
 
-      <a class="ml-navbar__nav-link d-none d-lg-block text-nowrap" routerLink="/categoria">
+      <a class="ml-navbar__nav-link d-none d-lg-block text-nowrap" [routerLink]="['/categoria', 'Moda']">
         <i class="fa-solid fa-shirt me-1"></i>Moda
       </a>
 
@@ -191,3 +194,26 @@
   </div>
 
 </nav>
+
+<!-- Modal informativo de ubicación (solo visual, sin login) -->
+<div class="modal fade" id="ubicacionModal" tabindex="-1" aria-labelledby="ubicacionModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: rgb(255, 230, 0);">
+        <h5 class="modal-title fw-bold" id="ubicacionModalLabel">
+          <i class="fa-solid fa-location-dot me-2"></i>Ubicación de entrega
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <p class="mb-2"><i class="fa-solid fa-truck-fast me-2 text-success"></i>Estamos entregando en <strong>{{ ubicacion }}</strong>.</p>
+        <p class="mb-2"><i class="fa-solid fa-gift me-2 text-success"></i>Envío gratis en tu primera compra.</p>
+        <p class="mb-0 text-muted small"><i class="fa-solid fa-circle-info me-1"></i>El cambio de ciudad por cuenta estará disponible próximamente.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Entendido</button>
+      </div>
+    </div>
+  </div>
+</div>
+

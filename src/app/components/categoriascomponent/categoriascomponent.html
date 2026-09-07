@@ -1,18 +1,82 @@
 <div class="ml-categories-page">
   <div class="container py-5">
-    <h2 class="mb-1 fw-bold animate__animated animate__fadeInDown"><i class="fa-solid fa-shapes text-primary me-2"></i>Categorías para explorar</h2>
-    <p class="text-muted mb-4 animate__animated animate__fadeIn"><i class="fa-regular fa-compass me-1"></i>Encuentra todo lo que buscas, organizado por sección</p>
+    <!-- ── Vista: productos de una categoría ── -->
+    <div *ngIf="categoriaSeleccionada() as categoria; else grilla">
+      <div class="d-flex align-items-center mb-1 gap-3">
+        <button class="btn btn-light rounded-circle" routerLink="/categoria" aria-label="Volver a categorías">
+          <i class="fa-solid fa-arrow-left"></i>
+        </button>
+        <h2 class="fw-bold m-0 animate__animated animate__fadeInDown">
+          <i class="fa-solid fa-folder-open text-primary me-2"></i>{{ categoria }}
+        </h2>
+      </div>
+      <p class="text-muted mb-4">{{ productos().length }} producto(s) en esta categoría</p>
 
-    <div class="row g-4">
-      <div class="col-6 col-md-4 col-lg-3" *ngFor="let cat of categorias; let i = index">
-        <div class="ml-cat-card p-3 rounded bg-white shadow-sm h-100 d-flex flex-column align-items-center text-center animate__animated animate__fadeInUp" [style.animation-delay]="(i * 60) + 'ms'">
-          <div class="ml-cat-img-wrapper mb-3 rounded-circle d-flex align-items-center justify-content-center bg-light overflow-hidden shadow-sm">
-             <img *ngIf="!imagenesRotas.has(cat.nombre)" [src]="cat.img" alt="{{ cat.nombre }}" class="w-100 h-100" style="object-fit: cover;" (error)="onImgError(cat.nombre)" loading="lazy">
-             <i *ngIf="imagenesRotas.has(cat.nombre)" [class]="cat.icono + ' fa-2x text-primary'"></i>
+      <div *ngIf="store.loading()" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+        <p class="mt-3 text-muted">Cargando productos...</p>
+      </div>
+
+      <div *ngIf="store.error() && !store.loading()" class="alert alert-warning">
+        <i class="fa-solid fa-triangle-exclamation me-2"></i>{{ store.error() }}
+        <button class="btn btn-sm btn-outline-secondary ms-3" (click)="recargar()">
+          <i class="fa-solid fa-rotate-right me-1"></i>Reintentar
+        </button>
+      </div>
+
+      <div *ngIf="!store.loading() && !store.error() && productos().length === 0" class="text-center py-5 text-muted">
+        <i class="fa-solid fa-box-open fa-4x mb-3 text-light"></i>
+        <h5>Aún no hay productos en {{ categoria }}</h5>
+        <p>Publica el primero o explora otras categorías.</p>
+        <div class="d-flex gap-2 justify-content-center mt-3">
+          <button class="btn btn-primary" routerLink="/crear-producto"><i class="fa-solid fa-plus me-1"></i>Publicar aquí</button>
+          <button class="btn btn-outline-secondary" routerLink="/categoria">Ver categorías</button>
+        </div>
+      </div>
+
+      <div class="row g-3" *ngIf="!store.loading() && productos().length > 0">
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3" *ngFor="let prod of productos()">
+          <div class="card h-100 border-0 shadow-sm ml-product-card">
+            <div class="text-center p-3 bg-white" style="height: 200px;">
+              <img [src]="prod.image" class="img-fluid h-100" style="object-fit: contain;" [alt]="prod.title" loading="lazy">
+            </div>
+            <div class="card-body d-flex flex-column border-top">
+              <span class="fs-4 fw-bold mb-2">{{ formatPrice(prod.price) }}</span>
+              <p class="card-text text-muted mb-2 lh-sm ml-product-title">{{ prod.title }}</p>
+              <button
+                class="btn btn-sm w-100 mt-auto"
+                [ngClass]="agregados.has(prod.id) ? 'btn-success' : 'btn-primary'"
+                (click)="agregarAlCarrito(prod.id)"
+              >
+                <i class="fa-solid" [ngClass]="agregados.has(prod.id) ? 'fa-check' : 'fa-cart-plus'"></i>
+                {{ agregados.has(prod.id) ? '¡Agregado!' : 'Agregar al carrito' }}
+              </button>
+            </div>
           </div>
-          <h6 class="fw-semibold text-dark mb-0">{{ cat.nombre }}</h6>
         </div>
       </div>
     </div>
+
+    <!-- ── Vista: grilla de categorías ── -->
+    <ng-template #grilla>
+      <h2 class="mb-1 fw-bold animate__animated animate__fadeInDown"><i class="fa-solid fa-shapes text-primary me-2"></i>Categorías para explorar</h2>
+      <p class="text-muted mb-4 animate__animated animate__fadeIn"><i class="fa-regular fa-compass me-1"></i>Encuentra todo lo que buscas, organizado por sección</p>
+
+      <div class="row g-4">
+        <div class="col-6 col-md-4 col-lg-3" *ngFor="let cat of categorias; let i = index">
+          <a [routerLink]="['/categoria', cat.nombre]" class="text-decoration-none">
+            <div class="ml-cat-card p-3 rounded bg-white shadow-sm h-100 d-flex flex-column align-items-center text-center animate__animated animate__fadeInUp" [style.animation-delay]="(i * 60) + 'ms'">
+              <div class="ml-cat-img-wrapper mb-3 rounded-circle d-flex align-items-center justify-content-center bg-light overflow-hidden shadow-sm">
+                 <img *ngIf="!imagenesRotas.has(cat.nombre)" [src]="cat.img" alt="{{ cat.nombre }}" class="w-100 h-100" style="object-fit: cover;" (error)="onImgError(cat.nombre)" loading="lazy">
+                 <i *ngIf="imagenesRotas.has(cat.nombre)" [class]="cat.icono + ' fa-2x text-primary'"></i>
+              </div>
+              <h6 class="fw-semibold text-dark mb-0">{{ cat.nombre }}</h6>
+            </div>
+          </a>
+        </div>
+      </div>
+    </ng-template>
   </div>
 </div>
