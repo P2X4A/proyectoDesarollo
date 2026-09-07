@@ -54,7 +54,7 @@
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end shadow-sm">
                   <li><button class="dropdown-item py-2" (click)="agregarAlCarrito(prod)"><i class="fa-solid fa-cart-plus me-2 text-primary"></i>Agregar al carrito</button></li>
-                  <li><a class="dropdown-item py-2" routerLink="/actualizar-producto"><i class="fa-solid fa-pen me-2 text-muted"></i>Modificar</a></li>
+                  <li><a class="dropdown-item py-2" [routerLink]="['/actualizar-producto', prod.id]"><i class="fa-solid fa-pen me-2 text-muted"></i>Modificar</a></li>
                   <li><a class="dropdown-item py-2 text-danger" routerLink="/eliminar-producto"><i class="fa-solid fa-trash me-2"></i>Eliminar</a></li>
                 </ul>
               </div>

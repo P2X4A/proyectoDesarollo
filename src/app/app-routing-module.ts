@@ -16,7 +16,7 @@ const routes: Routes = [
   { path: '', component: Contenidocomponent },
   { path: 'crear-producto', component: Crearproductocomponent },
   { path: 'listar-producto', component: Listarproductocomponent },
-  { path: 'actualizar-producto', component: Actualizarproductocomponent },
+  { path: 'actualizar-producto/:id', component: Actualizarproductocomponent },
   { path: 'eliminar-producto', component: Eliminarproductocomponent },
   { path: 'categoria', component: Categoriascomponent },
   { path: 'mercado-play', component: Mercadoplaycomponent },

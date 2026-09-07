@@ -9,4 +9,5 @@ export const environment = {
   omdbBaseUrl: 'https://www.omdbapi.com',
   omdbApiKey: 'a9bad909',
   fakeStoreBaseUrl: 'https://fakestoreapi.com/products',
+  productosBaseUrl: 'http://localhost:3001/productos',
 };

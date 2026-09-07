@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { ProductoService } from '../../services/producto/producto.service';
 
 @Component({
   selector: 'app-crearproductocomponent',
@@ -16,12 +17,24 @@ export class Crearproductocomponent {
     imagen: ''
   };
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private productoService: ProductoService) {}
 
   onSubmit() {
-    console.log('Producto a crear:', this.producto);
-    // TODO: Guardar en DataService / JSON
-    alert('Producto creado exitosamente (Simulación)');
-    this.router.navigate(['/listar-producto']);
+    this.productoService.crearProducto({
+      titulo: this.producto.nombre,
+      precio: Number(this.producto.precio),
+      categoria: this.producto.categoria,
+      descripcion: this.producto.descripcion,
+      imagen: this.producto.imagen,
+    }).subscribe({
+      next: () => {
+        alert('Producto creado exitosamente');
+        this.router.navigate(['/listar-producto']);
+      },
+      error: (err) => {
+        console.error('Error al crear producto', err);
+        alert('No se pudo crear el producto. ¿Está corriendo `npm run api`?');
+      },
+    });
   }
 }

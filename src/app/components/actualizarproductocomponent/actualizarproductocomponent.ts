@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ProductoService, Producto } from '../../services/producto/producto.service';
 
 @Component({
   selector: 'app-actualizarproductocomponent',
@@ -7,21 +8,53 @@ import { Router } from '@angular/router';
   templateUrl: './actualizarproductocomponent.html',
   styleUrl: './actualizarproductocomponent.css',
 })
-export class Actualizarproductocomponent {
+export class Actualizarproductocomponent implements OnInit {
+  productoId!: number;
+
   producto = {
-    id: 1,
-    nombre: 'Audífonos Bluetooth JBL Tune 710BT',
-    precio: 189000,
-    categoria: 'Tecnología',
-    descripcion: 'Excelentes audífonos con batería de larga duración.',
-    imagen: ''
+    nombre: '',
+    precio: 0,
+    categoria: '',
+    descripcion: '',
   };
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private productoService: ProductoService,
+  ) {}
+
+  ngOnInit(): void {
+    this.productoId = Number(this.route.snapshot.paramMap.get('id'));
+    this.productoService.obtenerProductoPorId(this.productoId).subscribe({
+      next: (prod: Producto) => {
+        this.producto = {
+          nombre: prod.titulo,
+          precio: prod.precio,
+          categoria: prod.categoria,
+          descripcion: prod.descripcion,
+        };
+      },
+      error: (err) => console.error('Error al cargar producto', err),
+    });
+  }
 
   onSubmit() {
-    console.log('Producto a actualizar:', this.producto);
-    alert('Producto actualizado exitosamente (Simulación)');
-    this.router.navigate(['/listar-producto']);
+    this.productoService.actualizarProducto(this.productoId, {
+      titulo: this.producto.nombre,
+      precio: Number(this.producto.precio),
+      categoria: this.producto.categoria,
+      descripcion: this.producto.descripcion,
+      imagen: '',
+    }).subscribe({
+      next: () => {
+        alert('Producto actualizado exitosamente');
+        this.router.navigate(['/listar-producto']);
+      },
+      error: (err) => {
+        console.error('Error al actualizar producto', err);
+        alert('No se pudo actualizar el producto.');
+      },
+    });
   }
 }

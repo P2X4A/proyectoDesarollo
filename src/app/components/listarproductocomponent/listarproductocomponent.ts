@@ -1,8 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { FakeStoreService } from '../../services/fake-store/fake-store.service';
+import { ProductoService, Producto } from '../../services/producto/producto.service';
 import { CartService } from '../../services/cart.service';
-import type { Product } from '../../services/fake-store/product.model';
-import type { Producto } from '../../models/producto';
+import type { Producto as ProductoCarrito } from '../../models/producto';
 
 interface ProductoVista {
   id: number;
@@ -20,7 +19,7 @@ interface ProductoVista {
   styleUrl: './listarproductocomponent.css',
 })
 export class Listarproductocomponent implements OnInit {
-  private fakeStoreService = inject(FakeStoreService);
+  private productoService = inject(ProductoService);
   private cartService = inject(CartService);
 
   productos: ProductoVista[] = [];
@@ -33,22 +32,21 @@ export class Listarproductocomponent implements OnInit {
   }
 
   cargarProductos() {
-    this.fakeStoreService.getAllProducts().subscribe({
-      next: (productos: Product[]) => {
-        // FakeStore trae precios en dólares, simulamos a pesos colombianos (* 4000)
-        this.productos = productos.map((prod: Product) => ({
+    this.productoService.obtenerProductos().subscribe({
+      next: (productos: Producto[]) => {
+        this.productos = productos.map((prod: Producto) => ({
           id: prod.id,
-          nombre: prod.title,
-          precio: Math.floor(prod.price * 4000),
-          categoria: prod.category,
-          estado: 'Activo', // Simulamos estado
-          imagen: prod.image,
+          nombre: prod.titulo,
+          precio: prod.precio,
+          categoria: prod.categoria,
+          estado: 'Activo',
+          imagen: prod.imagen,
         }));
         this.productosFiltrados = this.productos;
         this.isLoading = false;
       },
       error: (err) => {
-        console.error('Error al cargar productos de FakeStore', err);
+        console.error('Error al cargar productos', err);
         this.isLoading = false;
       },
     });
@@ -56,7 +54,7 @@ export class Listarproductocomponent implements OnInit {
 
   /** Agrega una publicación al carrito (precios ya convertidos a COP). */
   agregarAlCarrito(prod: ProductoVista): void {
-    const producto: Producto = {
+    const producto: ProductoCarrito = {
       id: prod.id,
       title: prod.nombre,
       price: prod.precio,
