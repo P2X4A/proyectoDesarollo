@@ -24,11 +24,8 @@ export interface StoreProductInput {
 }
 
 /**
- * Cambios locales sobre el catálogo de la API.
- * Es lo que se guarda en localStorage (nuestro ".json" local):
- * - `created`: productos nuevos (no existen en la API).
- * - `updated`: parches por id sobre productos de la API.
- * - `deleted`: ids de la API que el usuario eliminó.
+ * Cambios locales sobre el catálogo (se guardan en localStorage):
+ * `created` (nuevos), `updated` (parches por id), `deleted` (ids).
  */
 export interface ProductsOverlay {
   created: StoreProduct[];
@@ -45,10 +42,7 @@ export const EMPTY_OVERLAY: ProductsOverlay = {
 /** Tasa de conversión USD -> COP usada en toda la app. */
 export const USD_TO_COP = 4000;
 
-/**
- * Función pura: combina el catálogo de la API con los cambios locales.
- * Es pura (sin HTTP ni storage) para poder probarla fácil con unit tests.
- */
+/** Combina el catálogo de la API con los cambios locales (función pura, testeable). */
 export function applyOverlay(
   apiProducts: StoreProduct[],
   overlay: ProductsOverlay,

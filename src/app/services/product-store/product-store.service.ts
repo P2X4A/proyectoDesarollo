@@ -13,13 +13,9 @@ import {
 } from './store-product.model';
 
 /**
- * Store de productos (estado del catálogo).
- * Patrón: signal store por feature (Angular moderno).
- * - Estado privado escribible (`#products`), lectura pública solo-lectura.
- * - Async (HTTP) en RxJS; el resultado se escribe en el signal.
- * - Persistencia: la API es la fuente inicial; los cambios del usuario
- *   (crear/editar/eliminar) viven en un overlay en localStorage, porque
- *   FakeStore simula el POST/PUT/DELETE pero no persiste entre recargas.
+ * Estado del catálogo: la API es la fuente inicial y los cambios del
+ * usuario (crear/editar/eliminar) se guardan en un overlay en
+ * localStorage, porque FakeStore no persiste entre recargas.
  */
 @Injectable({ providedIn: 'root' })
 export class ProductStoreService {

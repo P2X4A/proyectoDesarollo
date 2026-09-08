@@ -1,14 +1,8 @@
 import { Injectable } from '@angular/core';
 
 /**
- * Acceso tipado y seguro a `localStorage`.
- * Buenas prácticas aplicadas:
- * - Un solo lugar para serializar/deserializar JSON (sin `JSON.parse`
- *   regado por los componentes).
- * - `try/catch` en lectura y escritura (modo privado / cuota llena no
- *   deben romper la app).
- * - Claves con prefijo `ml_` para no chocar con otras apps.
- * - Fácil de mockear en tests (es un servicio inyectable).
+ * Acceso tipado a `localStorage` con manejo de errores (modo privado o
+ * cuota llena no rompen la app) y claves con prefijo `ml_`.
  */
 @Injectable({ providedIn: 'root' })
 export class LocalStorageService {

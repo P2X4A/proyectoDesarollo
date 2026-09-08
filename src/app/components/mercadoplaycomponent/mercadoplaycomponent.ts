@@ -31,7 +31,7 @@ export class Mercadoplaycomponent implements OnInit {
   private omdbService = inject(OmdbService);
   private destroyRef = inject(DestroyRef);
 
-  /** Patrón canonical de búsqueda reactiva: debounce + distinct + switchMap. */
+  /** Búsqueda reactiva: espera 400ms tras cada tecla y cancela la petición anterior. */
   searchControl = new FormControl(BUSQUEDA_INICIAL, { nonNullable: true });
 
   peliculas: OmdbMovieShort[] = [];
