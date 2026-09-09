@@ -10,7 +10,6 @@ export interface Pedido {
   total: number;
   estado: EstadoPedido;
   fecha: string;
-  // Datos capturados en el formulario de checkout
   nombre: string;
   direccion: string;
   telefono: string;

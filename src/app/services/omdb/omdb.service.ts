@@ -5,17 +5,12 @@ import { catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import type { OmdbMovieDetail, OmdbSearchResponse } from './omdb.models';
 
-/**
- * Películas (OMDb API). La URL base y la API key salen de `environment`
- * y las respuestas van tipadas en `omdb.models.ts`.
- */
 @Injectable({ providedIn: 'root' })
 export class OmdbService {
   private cliente = inject(HttpClient);
   private readonly URL_BASE: string = environment.omdbBaseUrl;
   private readonly API_KEY: string = environment.omdbApiKey;
 
-  /** Busca películas por título. Ej: searchMovies('Avengers') */
   searchMovies(query: string): Observable<OmdbSearchResponse> {
     const params = new HttpParams()
       .set('apikey', this.API_KEY)
@@ -27,7 +22,6 @@ export class OmdbService {
       .pipe(catchError((err) => this.handleError(err)));
   }
 
-  /** Obtiene el detalle de una película por su IMDB ID. Ej: 'tt3896198' */
   getMovieById(id: string): Observable<OmdbMovieDetail> {
     const params = new HttpParams()
       .set('apikey', this.API_KEY)
@@ -39,7 +33,6 @@ export class OmdbService {
       .pipe(catchError((err) => this.handleError(err)));
   }
 
-  /** Obtiene el detalle por título exacto. */
   getMovieByTitle(title: string): Observable<OmdbMovieDetail> {
     const params = new HttpParams()
       .set('apikey', this.API_KEY)

@@ -7,20 +7,12 @@ import { EstadoPedido, Pedido } from '../models/pedido';
 const CARRITO_KEY = 'carrito';
 const HISTORIAL_KEY = 'historialPedidos';
 
-/**
- * Carrito compartido por toda la app (una sola instancia con
- * providedIn: 'root') y persistido en localStorage.
- */
 @Injectable({
   providedIn: 'root',
 })
 export class CartService {
-  // BehaviorSubject guarda el último valor emitido y se lo entrega
-  // inmediatamente a quien se suscriba
   private carritoSubject = new BehaviorSubject<CarritoItem[]>(this.cargarCarrito());
   carrito$: Observable<CarritoItem[]> = this.carritoSubject.asObservable();
-
-  // Persistencia
 
   private cargarCarrito(): CarritoItem[] {
     const data = localStorage.getItem(CARRITO_KEY);
@@ -35,8 +27,6 @@ export class CartService {
   obtenerCarrito(): CarritoItem[] {
     return this.carritoSubject.value;
   }
-
-  // Operaciones del carrito
 
   agregarProducto(producto: Producto, cantidad: number = 1): void {
     const items = [...this.obtenerCarrito()];
@@ -54,7 +44,7 @@ export class CartService {
   actualizarCantidad(productoId: number, cantidad: number): void {
     const items = this.obtenerCarrito()
       .map((i) => (i.producto.id === productoId ? { ...i, cantidad } : i))
-      .filter((i) => i.cantidad > 0); // si baja a 0, se elimina solo
+      .filter((i) => i.cantidad > 0);
 
     this.guardarCarrito(items);
   }
@@ -76,8 +66,6 @@ export class CartService {
     return this.obtenerCarrito().reduce((acc, i) => acc + i.cantidad, 0);
   }
 
-  //  Checkout / pedidos
-
   confirmarCompra(datos: {
     nombre: string;
     direccion: string;
@@ -87,7 +75,7 @@ export class CartService {
   }): Pedido {
     const items = this.obtenerCarrito();
     const subtotal = this.calcularSubtotal();
-    const envio = subtotal > 0 ? 8000 : 0; // costo de envío fijo de ejemplo, se puede ajustar en un futuro si es necesario.
+    const envio = subtotal > 0 ? 8000 : 0;
 
     const pedido: Pedido = {
       id: Date.now(),

@@ -1,9 +1,9 @@
-import { Component, OnInit, OnDestroy, computed, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, DestroyRef, OnInit, OnDestroy, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProductStoreService } from '../../services/product-store/product-store.service';
 import { CartService } from '../../services/cart.service';
 import type { Producto } from '../../models/producto';
 
-/** Banner del carrusel hero */
 interface Banner {
   titulo: string;
   subtitulo: string;
@@ -11,15 +11,25 @@ interface Banner {
   bgColor: string;
   textColor: string;
   icon: string;
-  /** Imagen sin copyright (Unsplash License, hotlink permitido). */
   imagen: string;
 }
 
-/** Categoría visual */
 interface CategoriaDestacada {
   nombre: string;
   icono: string;
   color: string;
+}
+
+interface Oferta {
+  id: number;
+  nombre: string;
+  precio: number;
+  precioOriginal: number;
+  imagen: string;
+  descuento: number;
+  envioGratis: boolean;
+  calificacion: number;
+  vendidos: number;
 }
 
 @Component({
@@ -31,11 +41,11 @@ interface CategoriaDestacada {
 export class Contenidocomponent implements OnInit, OnDestroy {
   private store = inject(ProductStoreService);
   private cartService = inject(CartService);
+  private cdr = inject(ChangeDetectorRef);
+  private destroyRef = inject(DestroyRef);
 
-  /** IDs con confirmación visual de "agregado" (feedback temporal). */
   agregados = new Set<number>();
 
-  /* ── Carousel ── */
   carouselIndex = 0;
   private carouselInterval: ReturnType<typeof setInterval> | null = null;
 
@@ -72,7 +82,6 @@ export class Contenidocomponent implements OnInit, OnDestroy {
     },
   ];
 
-  /* ── Categorías destacadas ── */
   categoriasDestacadas: CategoriaDestacada[] = [
     { nombre: 'Electrónica',  icono: 'fa-solid fa-mobile-screen',      color: 'rgb(52, 131, 250)' },
     { nombre: 'Ropa',         icono: 'fa-solid fa-shirt',              color: 'rgb(233, 64, 87)' },
@@ -84,27 +93,9 @@ export class Contenidocomponent implements OnInit, OnDestroy {
     { nombre: 'Belleza',      icono: 'fa-solid fa-spa',                color: 'rgb(230, 80, 180)' },
   ];
 
-  /* ── Ofertas del día (desde el store: API + mis publicaciones) ── */
-  ofertas = computed(() =>
-    this.store.products().slice(0, 8).map((prod) => {
-      const descuento = Math.floor(Math.random() * 30) + 10;
-      const precioOriginal = Math.floor(prod.price * (1 + descuento / 100));
-      return {
-        id: prod.id,
-        nombre: prod.title,
-        precio: prod.price,
-        precioOriginal,
-        imagen: prod.image,
-        descuento,
-        envioGratis: prod.price > 200000,
-        calificacion: 4.5,
-        vendidos: 120,
-      };
-    }),
-  );
-  isLoadingOfertas = this.store.loading;
+  ofertas: Oferta[] = [];
+  isLoadingOfertas = false;
 
-  /* ── Productos más buscados (lista real de mercadolibre.com.co) ── */
   busquedasPopulares: string[] = [
     'air fryer', 'aire acondicionado', 'airpods', 'alexa', 'apple watch',
     'audifonos', 'ipad', 'iphone 16', 'jbl', 'lavadora',
@@ -112,12 +103,34 @@ export class Contenidocomponent implements OnInit, OnDestroy {
     'redmi', 'samsung a54', 'silla gamer', 'smartwatch', 'xiaomi',
   ];
 
-  /* ── Índice alfabético ── */
   letras: string[] = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
-  /* ── Ciclo de vida ── */
   ngOnInit(): void {
     this.carouselInterval = setInterval(() => this.nextBanner(), 5000);
+
+    this.store.products$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((productos) => {
+      this.ofertas = productos.slice(0, 8).map((prod) => {
+        const descuento = Math.floor(Math.random() * 30) + 10;
+        const precioOriginal = Math.floor(prod.price * (1 + descuento / 100));
+        return {
+          id: prod.id,
+          nombre: prod.title,
+          precio: prod.price,
+          precioOriginal,
+          imagen: prod.image,
+          descuento,
+          envioGratis: prod.price > 200000,
+          calificacion: 4.5,
+          vendidos: 120,
+        };
+      });
+      this.cdr.markForCheck();
+    });
+    this.store.loading$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((cargando) => {
+      this.isLoadingOfertas = cargando;
+      this.cdr.markForCheck();
+    });
+
     this.store.loadAll();
   }
 
@@ -127,12 +140,10 @@ export class Contenidocomponent implements OnInit, OnDestroy {
     }
   }
 
-  /* ── Carousel ── */
   nextBanner(): void {
     this.carouselIndex = (this.carouselIndex + 1) % this.banners.length;
   }
 
-  /** Reintenta cargar el catálogo tras un error de red. */
   recargarOfertas(): void {
     this.store.loadAll(true);
   }
@@ -145,12 +156,10 @@ export class Contenidocomponent implements OnInit, OnDestroy {
     this.carouselIndex = index;
   }
 
-  /* ── Utilidades ── */
   formatPrice(precio: number): string {
     return '$ ' + precio.toLocaleString('es-CO');
   }
 
-  /** Agrega una oferta al carrito (precios del store ya están en COP). */
   agregarAlCarrito(oferta: { id: number; nombre: string; precio: number; imagen: string }): void {
     const producto: Producto = {
       id: oferta.id,
@@ -162,10 +171,12 @@ export class Contenidocomponent implements OnInit, OnDestroy {
     };
     this.cartService.agregarProducto(producto);
     this.agregados.add(oferta.id);
-    setTimeout(() => this.agregados.delete(oferta.id), 1500);
+    setTimeout(() => {
+      this.agregados.delete(oferta.id);
+      this.cdr.markForCheck();
+    }, 1500);
   }
 
-  /** Retorna un array del tamaño del rating para renderizar estrellas */
   getStars(rating: number): number[] {
     return Array(Math.floor(rating)).fill(0);
   }

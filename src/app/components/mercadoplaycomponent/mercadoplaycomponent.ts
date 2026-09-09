@@ -31,14 +31,12 @@ export class Mercadoplaycomponent implements OnInit {
   private omdbService = inject(OmdbService);
   private destroyRef = inject(DestroyRef);
 
-  /** Búsqueda reactiva: espera 400ms tras cada tecla y cancela la petición anterior. */
   searchControl = new FormControl(BUSQUEDA_INICIAL, { nonNullable: true });
 
   peliculas: OmdbMovieShort[] = [];
   isLoading = true;
   mensajeError = '';
 
-  /** Detalle de la película seleccionada (null = ningún detalle abierto). */
   detalle: OmdbMovieDetail | null = null;
   isLoadingDetalle = false;
   errorDetalle = '';
@@ -73,7 +71,6 @@ export class Mercadoplaycomponent implements OnInit {
       });
   }
 
-  /** Carga el detalle de una película (ficha completa). */
   verDetalle(pelicula: OmdbMovieShort): void {
     this.detalle = null;
     this.errorDetalle = '';
@@ -103,10 +100,6 @@ export class Mercadoplaycomponent implements OnInit {
     this.errorDetalle = '';
   }
 
-  /**
-   * Imagen a mostrar: si OMDb no trae póster ("N/A"), se usa una
-   * imagen sin copyright de Picsum con seed estable por película.
-   */
   posterDe(pelicula: OmdbMovieShort): string {
     if (pelicula.Poster && pelicula.Poster !== 'N/A') {
       return pelicula.Poster;

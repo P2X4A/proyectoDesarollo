@@ -1,12 +1,6 @@
-/**
- * Producto tal como lo usa la app (precios en COP, no en USD).
- * `source` indica si vino de la API o fue creado localmente
- * (FakeStore simula el POST pero no lo persiste entre recargas).
- */
 export interface StoreProduct {
   id: number;
   title: string;
-  /** Precio en pesos colombianos (COP). */
   price: number;
   description: string;
   category: string;
@@ -14,7 +8,6 @@ export interface StoreProduct {
   source: 'api' | 'local';
 }
 
-/** Datos que el usuario puede ingresar al crear/editar. */
 export interface StoreProductInput {
   title: string;
   price: number;
@@ -23,10 +16,6 @@ export interface StoreProductInput {
   image: string;
 }
 
-/**
- * Cambios locales sobre el catálogo (se guardan en localStorage):
- * `created` (nuevos), `updated` (parches por id), `deleted` (ids).
- */
 export interface ProductsOverlay {
   created: StoreProduct[];
   updated: Record<number, Partial<StoreProduct>>;
@@ -39,10 +28,8 @@ export const EMPTY_OVERLAY: ProductsOverlay = {
   deleted: [],
 };
 
-/** Tasa de conversión USD -> COP usada en toda la app. */
 export const USD_TO_COP = 4000;
 
-/** Combina el catálogo de la API con los cambios locales (función pura, testeable). */
 export function applyOverlay(
   apiProducts: StoreProduct[],
   overlay: ProductsOverlay,

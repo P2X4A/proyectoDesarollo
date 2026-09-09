@@ -1,9 +1,10 @@
-import { Component, computed, inject, signal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ChangeDetectorRef, Component, DestroyRef, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ActivatedRoute } from '@angular/router';
 import { ProductStoreService } from '../../services/product-store/product-store.service';
 import { CartService } from '../../services/cart.service';
 import { filterProducts } from '../../services/product-store/product-filter';
+import type { StoreProduct } from '../../services/product-store/store-product.model';
 import type { Producto } from '../../models/producto';
 
 @Component({
@@ -12,25 +13,48 @@ import type { Producto } from '../../models/producto';
   templateUrl: './buscarcomponent.html',
   styleUrl: './buscarcomponent.css',
 })
-export class Buscarcomponent {
-  protected store = inject(ProductStoreService);
-  private cartService = inject(CartService);
+export class Buscarcomponent implements OnInit {
+  query = '';
+  cargando = false;
+  error: string | null = null;
+  resultados: StoreProduct[] = [];
 
-  /** Término actual (sincronizado con ?q= de la URL, compartible). */
-  readonly query = signal('');
-
-  /** Resultados derivados del catálogo + término (sin copias que se desincronicen). */
-  readonly resultados = computed(() => filterProducts(this.store.products(), this.query()));
-
-  /** IDs con confirmación visual temporal. */
   agregados = new Set<number>();
 
-  constructor() {
-    const route = inject(ActivatedRoute);
+  private catalogo: StoreProduct[] = [];
+
+  constructor(
+    protected store: ProductStoreService,
+    private cartService: CartService,
+    private route: ActivatedRoute,
+    private cdr: ChangeDetectorRef,
+    private destroyRef: DestroyRef,
+  ) {}
+
+  ngOnInit(): void {
+    this.store.products$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((productos) => {
+      this.catalogo = productos;
+      this.actualizarResultados();
+    });
+    this.store.loading$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((cargando) => {
+      this.cargando = cargando;
+      this.cdr.markForCheck();
+    });
+    this.store.error$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((error) => {
+      this.error = error;
+      this.cdr.markForCheck();
+    });
     this.store.loadAll();
-    route.queryParamMap
-      .pipe(takeUntilDestroyed())
-      .subscribe((params) => this.query.set((params.get('q') ?? '').trim()));
+
+    this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
+      this.query = (params.get('q') ?? '').trim();
+      this.actualizarResultados();
+    });
+  }
+
+  private actualizarResultados(): void {
+    this.resultados = filterProducts(this.catalogo, this.query);
+    this.cdr.markForCheck();
   }
 
   recargar(): void {
@@ -56,6 +80,9 @@ export class Buscarcomponent {
     };
     this.cartService.agregarProducto(producto);
     this.agregados.add(id);
-    setTimeout(() => this.agregados.delete(id), 1500);
+    setTimeout(() => {
+      this.agregados.delete(id);
+      this.cdr.markForCheck();
+    }, 1500);
   }
 }

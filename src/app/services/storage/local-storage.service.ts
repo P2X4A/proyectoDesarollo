@@ -1,9 +1,5 @@
 import { Injectable } from '@angular/core';
 
-/**
- * Acceso tipado a `localStorage` con manejo de errores (modo privado o
- * cuota llena no rompen la app) y claves con prefijo `ml_`.
- */
 @Injectable({ providedIn: 'root' })
 export class LocalStorageService {
   private readonly PREFIX = 'ml_';

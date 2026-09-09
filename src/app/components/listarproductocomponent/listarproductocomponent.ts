@@ -1,6 +1,8 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, DestroyRef, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProductStoreService } from '../../services/product-store/product-store.service';
 import { CartService } from '../../services/cart.service';
+import type { StoreProduct } from '../../services/product-store/store-product.model';
 import type { Producto } from '../../models/producto';
 
 @Component({
@@ -10,14 +12,33 @@ import type { Producto } from '../../models/producto';
   styleUrl: './listarproductocomponent.css',
 })
 export class Listarproductocomponent implements OnInit {
-  protected store = inject(ProductStoreService);
-  private cartService = inject(CartService);
+  productos: StoreProduct[] = [];
+  cargando = false;
+  error: string | null = null;
+
+  constructor(
+    protected store: ProductStoreService,
+    private cartService: CartService,
+    private cdr: ChangeDetectorRef,
+    private destroyRef: DestroyRef,
+  ) {}
 
   ngOnInit() {
+    this.store.products$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((productos) => {
+      this.productos = productos;
+      this.cdr.markForCheck();
+    });
+    this.store.loading$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((cargando) => {
+      this.cargando = cargando;
+      this.cdr.markForCheck();
+    });
+    this.store.error$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((error) => {
+      this.error = error;
+      this.cdr.markForCheck();
+    });
     this.store.loadAll();
   }
 
-  /** Agrega una publicación al carrito (precios del store ya están en COP). */
   agregarAlCarrito(prodId: number): void {
     const prod = this.store.getById(prodId);
     if (!prod) {

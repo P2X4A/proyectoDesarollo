@@ -1,5 +1,5 @@
-import { computed, inject, Injectable, Signal, signal } from '@angular/core';
-import { Observable } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { FakeStoreService } from '../fake-store/fake-store.service';
 import { LocalStorageService } from '../storage/local-storage.service';
 import type { Product } from '../fake-store/product.model';
@@ -12,69 +12,61 @@ import {
   type StoreProductInput,
 } from './store-product.model';
 
-/**
- * Estado del catálogo: la API es la fuente inicial y los cambios del
- * usuario (crear/editar/eliminar) se guardan en un overlay en
- * localStorage, porque FakeStore no persiste entre recargas.
- */
 @Injectable({ providedIn: 'root' })
 export class ProductStoreService {
   private fakeStore = inject(FakeStoreService);
   private storage = inject(LocalStorageService);
 
   private readonly OVERLAY_KEY = 'products_overlay_v1';
+  private loaded = false;
 
-  // ── Estado privado ──
-  private readonly _products = signal<StoreProduct[]>([]);
-  private readonly _loading = signal(false);
-  private readonly _error = signal<string | null>(null);
-  private readonly _loaded = signal(false);
+  private productsSubject = new BehaviorSubject<StoreProduct[]>([]);
+  private loadingSubject = new BehaviorSubject<boolean>(false);
+  private errorSubject = new BehaviorSubject<string | null>(null);
 
-  // ── Lectura pública (solo-lectura) ──
-  readonly products: Signal<StoreProduct[]> = this._products.asReadonly();
-  readonly loading: Signal<boolean> = this._loading.asReadonly();
-  readonly error: Signal<string | null> = this._error.asReadonly();
-  readonly count = computed(() => this._products().length);
+  products$: Observable<StoreProduct[]> = this.productsSubject.asObservable();
+  loading$: Observable<boolean> = this.loadingSubject.asObservable();
+  error$: Observable<string | null> = this.errorSubject.asObservable();
 
-  /** Carga el catálogo (API + cambios locales). Llamadas extra se ignoran si ya cargó. */
+  getProducts(): StoreProduct[] {
+    return this.productsSubject.value;
+  }
+
+  isLoading(): boolean {
+    return this.loadingSubject.value;
+  }
+
   loadAll(force = false): void {
-    if (this._loaded() && !force) {
+    if (this.loaded && !force) {
       return;
     }
-    this._loading.set(true);
-    this._error.set(null);
+    this.loadingSubject.next(true);
+    this.errorSubject.next(null);
 
     this.fakeStore.getAllProducts().subscribe({
       next: (apiProducts: Product[]) => {
         const mapped = apiProducts.map((p) => this.fromApi(p));
-        this._products.set(applyOverlay(mapped, this.readOverlay()));
-        this._loaded.set(true);
-        this._loading.set(false);
+        this.productsSubject.next(applyOverlay(mapped, this.readOverlay()));
+        this.loaded = true;
+        this.loadingSubject.next(false);
       },
       error: (err) => {
         console.error('[ProductStore] Error cargando productos:', err);
-        // Sin red: al menos mostramos lo creado localmente.
-        this._products.set(applyOverlay([], this.readOverlay()));
-        this._loaded.set(true);
-        this._loading.set(false);
-        this._error.set('No se pudo cargar el catálogo. Revisa tu conexión.');
+        this.productsSubject.next(applyOverlay([], this.readOverlay()));
+        this.loaded = true;
+        this.loadingSubject.next(false);
+        this.errorSubject.next('No se pudo cargar el catálogo. Revisa tu conexión.');
       },
     });
   }
 
-  /** Busca un producto del estado actual por id (o null si no existe). */
   getById(id: number): StoreProduct | null {
-    return this._products().find((p) => p.id === id) ?? null;
+    return this.getProducts().find((p) => p.id === id) ?? null;
   }
 
-  /**
-   * Crea un producto. Intenta POST a la API (best-effort) y siempre
-   * guarda copia local para que sobreviva recargas.
-   */
   create(input: StoreProductInput): Observable<StoreProduct> {
     const local: StoreProduct = { ...input, id: Date.now(), source: 'local' };
 
-    // Best-effort contra la API: si falla, el producto local igual queda.
     this.fakeStore
       .createProduct({ title: input.title, price: input.price })
       .subscribe({ error: (err) => console.warn('[ProductStore] POST API falló:', err) });
@@ -83,13 +75,12 @@ export class ProductStoreService {
       const overlay = this.readOverlay();
       overlay.created = [local, ...overlay.created];
       this.writeOverlay(overlay);
-      this._products.update((items) => [local, ...items]);
+      this.productsSubject.next([local, ...this.getProducts()]);
       subscriber.next(local);
       subscriber.complete();
     });
   }
 
-  /** Actualiza un producto (API best-effort + overlay local). */
   update(id: number, patch: Partial<StoreProductInput>): Observable<StoreProduct | null> {
     this.fakeStore
       .updateProduct(id, { title: patch.title, price: patch.price })
@@ -111,15 +102,14 @@ export class ProductStoreService {
         overlay.updated = { ...overlay.updated, [id]: { ...overlay.updated[id], ...patch } };
       }
       this.writeOverlay(overlay);
-      this._products.update((items) =>
-        items.map((p) => (p.id === id ? { ...p, ...patch } : p)),
+      this.productsSubject.next(
+        this.getProducts().map((p) => (p.id === id ? { ...p, ...patch } : p)),
       );
       subscriber.next(this.getById(id));
       subscriber.complete();
     });
   }
 
-  /** Elimina un producto (API best-effort + overlay local). */
   remove(id: number): Observable<boolean> {
     this.fakeStore
       .deleteProduct(id)
@@ -141,15 +131,12 @@ export class ProductStoreService {
         overlay.updated = rest;
       }
       this.writeOverlay(overlay);
-      this._products.update((items) => items.filter((p) => p.id !== id));
+      this.productsSubject.next(this.getProducts().filter((p) => p.id !== id));
       subscriber.next(true);
       subscriber.complete();
     });
   }
 
-  // ── Privados ──
-
-  /** Convierte un producto de la API (USD) al modelo de la app (COP). */
   private fromApi(p: Product): StoreProduct {
     return {
       id: p.id,

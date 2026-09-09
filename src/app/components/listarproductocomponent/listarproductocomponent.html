@@ -1,7 +1,7 @@
 <div class="ml-list-page py-5">
   <div class="container ml-list-container bg-white p-4 p-md-5 rounded shadow-sm animate__animated animate__fadeIn">
     <div class="d-flex justify-content-between align-items-center mb-4">
-      <h2 class="fw-bold text-dark m-0"><i class="fa-solid fa-boxes-stacked text-primary me-2"></i>Mis publicaciones <span class="badge bg-primary ms-1">{{ store.count() }}</span></h2>
+      <h2 class="fw-bold text-dark m-0"><i class="fa-solid fa-boxes-stacked text-primary me-2"></i>Mis publicaciones <span class="badge bg-primary ms-1">{{ productos.length }}</span></h2>
       <button class="btn btn-primary ml-btn-primary fw-bold" routerLink="/crear-producto"><i class="fa-solid fa-plus me-1"></i>Publicar nuevo</button>
     </div>
 
@@ -17,21 +17,21 @@
       </select>
     </div>
 
-    <div *ngIf="store.loading()" class="text-center py-5">
+    <div *ngIf="cargando" class="text-center py-5">
       <div class="spinner-border text-primary" role="status">
         <span class="visually-hidden">Cargando...</span>
       </div>
       <p class="mt-3 text-muted">Cargando tus publicaciones...</p>
     </div>
 
-    <div *ngIf="store.error() && !store.loading()" class="alert alert-warning">
-      <i class="fa-solid fa-triangle-exclamation me-2"></i>{{ store.error() }}
+    <div *ngIf="error && !cargando" class="alert alert-warning">
+      <i class="fa-solid fa-triangle-exclamation me-2"></i>{{ error }}
       <button class="btn btn-sm btn-outline-secondary ms-3" (click)="store.loadAll(true)">
         <i class="fa-solid fa-rotate-right me-1"></i>Reintentar
       </button>
     </div>
 
-    <div class="table-responsive" *ngIf="!store.loading() && store.products().length > 0">
+    <div class="table-responsive" *ngIf="!cargando && productos.length > 0">
       <table class="table table-hover align-middle">
         <thead class="table-light text-muted">
           <tr>
@@ -44,7 +44,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let prod of store.products()">
+          <tr *ngFor="let prod of productos">
             <td class="text-muted">#{{ prod.id }}</td>
             <td class="fw-semibold text-dark">{{ prod.title }}</td>
             <td>{{ prod.price | currency:'COP':'symbol-narrow':'1.0-0' }}</td>
@@ -71,7 +71,7 @@
       </table>
     </div>
 
-    <div *ngIf="!store.loading() && store.products().length === 0" class="text-center py-5 text-muted">
+    <div *ngIf="!cargando && productos.length === 0" class="text-center py-5 text-muted">
       <i class="fa-solid fa-box-open fa-4x mb-3 text-light"></i>
       <h5>Aún no tienes publicaciones</h5>
       <p>Empieza a vender tus productos ahora mismo.</p>

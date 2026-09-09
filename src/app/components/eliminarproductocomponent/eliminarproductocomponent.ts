@@ -1,4 +1,4 @@
-import { Component, effect, inject } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductStoreService } from '../../services/product-store/product-store.service';
 
@@ -9,9 +9,6 @@ import { ProductStoreService } from '../../services/product-store/product-store.
   styleUrl: './eliminarproductocomponent.css',
 })
 export class Eliminarproductocomponent {
-  private store = inject(ProductStoreService);
-  private router = inject(Router);
-
   private readonly productId: number | null;
 
   nombre = '';
@@ -19,8 +16,13 @@ export class Eliminarproductocomponent {
   isDeleting = false;
   errorMsg: string | null = null;
 
-  constructor() {
-    const id = Number(inject(ActivatedRoute).snapshot.paramMap.get('id'));
+  constructor(
+    private store: ProductStoreService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private cdr: ChangeDetectorRef,
+  ) {
+    const id = Number(this.route.snapshot.paramMap.get('id'));
     this.productId = Number.isFinite(id) ? id : null;
 
     if (this.productId === null) {
@@ -31,8 +33,8 @@ export class Eliminarproductocomponent {
 
     this.store.loadAll();
 
-    effect(() => {
-      if (this.store.loading() || !this.isLoading || this.productId === null) {
+    this.store.loading$.subscribe((cargando) => {
+      if (cargando || !this.isLoading || this.productId === null) {
         return;
       }
       const found = this.store.getById(this.productId);
@@ -42,6 +44,7 @@ export class Eliminarproductocomponent {
         this.errorMsg = `No existe una publicación con id ${this.productId}.`;
       }
       this.isLoading = false;
+      this.cdr.markForCheck();
     });
   }
 
@@ -59,11 +62,13 @@ export class Eliminarproductocomponent {
         } else {
           this.isDeleting = false;
           this.errorMsg = 'La publicación ya no existe.';
+          this.cdr.markForCheck();
         }
       },
       error: () => {
         this.isDeleting = false;
         this.errorMsg = 'No se pudo eliminar. Inténtalo de nuevo.';
+        this.cdr.markForCheck();
       },
     });
   }

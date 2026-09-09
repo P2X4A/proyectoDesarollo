@@ -15,10 +15,8 @@ export class Carritocomponent implements OnInit {
   envio = 8000;
   mostrarFormulario = false;
   pedidoConfirmado: Pedido | null = null;
-  /** Error de validación del checkout (reemplaza al alert nativo). */
   checkoutError: string | null = null;
 
-//datos para el formulario de salida ( recibo)
   nombre = '';
   direccion = '';
   telefono = '';
@@ -27,8 +25,6 @@ export class Carritocomponent implements OnInit {
   constructor(private cartService: CartService) {}
 
   ngOnInit(): void {
-    // Cada vez que el carrito cambie (desde cualquier parte de la app),
-    // esta vista se actualiza sola.
     this.cartService.carrito$.subscribe((items) => {
       this.items = items;
       this.subtotal = this.cartService.calcularSubtotal();

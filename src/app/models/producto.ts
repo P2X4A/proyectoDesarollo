@@ -1,5 +1,3 @@
-// Esta parte de la clase, coincide con la forma de los datos que devuelve Fake Store API
-// (https://fakestoreapi.com/products).
 export interface Producto {
   id: number;
   title: string;

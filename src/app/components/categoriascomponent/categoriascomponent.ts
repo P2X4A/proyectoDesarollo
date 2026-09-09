@@ -1,9 +1,10 @@
-import { Component, computed, inject, signal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ChangeDetectorRef, Component, DestroyRef, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ActivatedRoute } from '@angular/router';
 import { ProductStoreService } from '../../services/product-store/product-store.service';
 import { CartService } from '../../services/cart.service';
 import { filterByCategory } from '../../services/product-store/product-filter';
+import type { StoreProduct } from '../../services/product-store/store-product.model';
 import type { Producto } from '../../models/producto';
 
 @Component({
@@ -12,26 +13,16 @@ import type { Producto } from '../../models/producto';
   templateUrl: './categoriascomponent.html',
   styleUrl: './categoriascomponent.css',
 })
-export class Categoriascomponent {
-  protected store = inject(ProductStoreService);
-  private cartService = inject(CartService);
+export class Categoriascomponent implements OnInit {
+  categoriaSeleccionada: string | null = null;
+  cargando = false;
+  error: string | null = null;
+  productos: StoreProduct[] = [];
 
-  /** Categoría seleccionada vía /categoria/:nombre (null = grilla). */
-  readonly categoriaSeleccionada = signal<string | null>(null);
-
-  /** Productos de la categoría (derivados, sin duplicar estado). */
-  readonly productos = computed(() => {
-    const cat = this.categoriaSeleccionada();
-    if (!cat) {
-      return [];
-    }
-    return filterByCategory(this.store.products(), cat);
-  });
-
-  /** Nombres de categorías cuya imagen falló: se muestra el icono FA. */
   imagenesRotas = new Set<string>();
-
   agregados = new Set<number>();
+
+  private catalogo: StoreProduct[] = [];
 
   categorias = [
     { nombre: 'Vehículos', icono: 'fa-solid fa-car', img: 'https://images.unsplash.com/photo-1511919884226-fd3cad34687c?q=80&w=200&auto=format&fit=crop' },
@@ -45,12 +36,40 @@ export class Categoriascomponent {
     { nombre: 'Juegos y Juguetes', icono: 'fa-solid fa-gamepad', img: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=200&auto=format&fit=crop' },
   ];
 
-  constructor() {
-    const route = inject(ActivatedRoute);
+  constructor(
+    protected store: ProductStoreService,
+    private cartService: CartService,
+    private route: ActivatedRoute,
+    private cdr: ChangeDetectorRef,
+    private destroyRef: DestroyRef,
+  ) {}
+
+  ngOnInit(): void {
+    this.store.products$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((productos) => {
+      this.catalogo = productos;
+      this.actualizarProductos();
+    });
+    this.store.loading$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((cargando) => {
+      this.cargando = cargando;
+      this.cdr.markForCheck();
+    });
+    this.store.error$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((error) => {
+      this.error = error;
+      this.cdr.markForCheck();
+    });
     this.store.loadAll();
-    route.paramMap
-      .pipe(takeUntilDestroyed())
-      .subscribe((params) => this.categoriaSeleccionada.set(params.get('nombre')));
+
+    this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
+      this.categoriaSeleccionada = params.get('nombre');
+      this.actualizarProductos();
+    });
+  }
+
+  private actualizarProductos(): void {
+    this.productos = this.categoriaSeleccionada
+      ? filterByCategory(this.catalogo, this.categoriaSeleccionada)
+      : [];
+    this.cdr.markForCheck();
   }
 
   onImgError(nombre: string): void {
@@ -80,6 +99,9 @@ export class Categoriascomponent {
     };
     this.cartService.agregarProducto(producto);
     this.agregados.add(id);
-    setTimeout(() => this.agregados.delete(id), 1500);
+    setTimeout(() => {
+      this.agregados.delete(id);
+      this.cdr.markForCheck();
+    }, 1500);
   }
 }

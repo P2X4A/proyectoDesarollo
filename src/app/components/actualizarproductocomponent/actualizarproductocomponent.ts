@@ -1,4 +1,4 @@
-import { Component, effect, inject } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductStoreService } from '../../services/product-store/product-store.service';
 
@@ -9,9 +9,6 @@ import { ProductStoreService } from '../../services/product-store/product-store.
   styleUrl: './actualizarproductocomponent.css',
 })
 export class Actualizarproductocomponent {
-  private store = inject(ProductStoreService);
-  private router = inject(Router);
-
   private readonly productId: number | null;
 
   producto = {
@@ -26,8 +23,13 @@ export class Actualizarproductocomponent {
   isSaving = false;
   errorMsg: string | null = null;
 
-  constructor() {
-    const id = Number(inject(ActivatedRoute).snapshot.paramMap.get('id'));
+  constructor(
+    private store: ProductStoreService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private cdr: ChangeDetectorRef,
+  ) {
+    const id = Number(this.route.snapshot.paramMap.get('id'));
     this.productId = Number.isFinite(id) ? id : null;
 
     if (this.productId === null) {
@@ -38,9 +40,8 @@ export class Actualizarproductocomponent {
 
     this.store.loadAll();
 
-    // Reacciona cuando el store termina de cargar (o si ya tenía datos).
-    effect(() => {
-      if (this.store.loading() || !this.isLoading || this.productId === null) {
+    this.store.loading$.subscribe((cargando) => {
+      if (cargando || !this.isLoading || this.productId === null) {
         return;
       }
       const found = this.store.getById(this.productId);
@@ -56,6 +57,7 @@ export class Actualizarproductocomponent {
         this.errorMsg = `No existe una publicación con id ${this.productId}.`;
       }
       this.isLoading = false;
+      this.cdr.markForCheck();
     });
   }
 
@@ -81,11 +83,13 @@ export class Actualizarproductocomponent {
           } else {
             this.isSaving = false;
             this.errorMsg = 'La publicación ya no existe.';
+            this.cdr.markForCheck();
           }
         },
         error: () => {
           this.isSaving = false;
           this.errorMsg = 'No se pudo guardar. Inténtalo de nuevo.';
+          this.cdr.markForCheck();
         },
       });
   }

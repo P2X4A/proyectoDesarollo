@@ -1,7 +1,7 @@
 <div class="ml-categories-page">
   <div class="container py-5">
     <!-- ── Vista: productos de una categoría ── -->
-    <div *ngIf="categoriaSeleccionada() as categoria; else grilla">
+    <div *ngIf="categoriaSeleccionada as categoria; else grilla">
       <div class="d-flex align-items-center mb-1 gap-3">
         <button class="btn btn-light rounded-circle" routerLink="/categoria" aria-label="Volver a categorías">
           <i class="fa-solid fa-arrow-left"></i>
@@ -10,23 +10,23 @@
           <i class="fa-solid fa-folder-open text-primary me-2"></i>{{ categoria }}
         </h2>
       </div>
-      <p class="text-muted mb-4">{{ productos().length }} producto(s) en esta categoría</p>
+      <p class="text-muted mb-4">{{ productos.length }} producto(s) en esta categoría</p>
 
-      <div *ngIf="store.loading()" class="text-center py-5">
+      <div *ngIf="cargando" class="text-center py-5">
         <div class="spinner-border text-primary" role="status">
           <span class="visually-hidden">Cargando...</span>
         </div>
         <p class="mt-3 text-muted">Cargando productos...</p>
       </div>
 
-      <div *ngIf="store.error() && !store.loading()" class="alert alert-warning">
-        <i class="fa-solid fa-triangle-exclamation me-2"></i>{{ store.error() }}
+      <div *ngIf="error && !cargando" class="alert alert-warning">
+        <i class="fa-solid fa-triangle-exclamation me-2"></i>{{ error }}
         <button class="btn btn-sm btn-outline-secondary ms-3" (click)="recargar()">
           <i class="fa-solid fa-rotate-right me-1"></i>Reintentar
         </button>
       </div>
 
-      <div *ngIf="!store.loading() && !store.error() && productos().length === 0" class="text-center py-5 text-muted">
+      <div *ngIf="!cargando && !error && productos.length === 0" class="text-center py-5 text-muted">
         <i class="fa-solid fa-box-open fa-4x mb-3 text-light"></i>
         <h5>Aún no hay productos en {{ categoria }}</h5>
         <p>Publica el primero o explora otras categorías.</p>
@@ -36,8 +36,8 @@
         </div>
       </div>
 
-      <div class="row g-3" *ngIf="!store.loading() && productos().length > 0">
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3" *ngFor="let prod of productos()">
+      <div class="row g-3" *ngIf="!cargando && productos.length > 0">
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3" *ngFor="let prod of productos">
           <div class="card h-100 border-0 shadow-sm ml-product-card">
             <div class="text-center p-3 bg-white" style="height: 200px;">
               <img [src]="prod.image" class="img-fluid h-100" style="object-fit: contain;" [alt]="prod.title" loading="lazy">

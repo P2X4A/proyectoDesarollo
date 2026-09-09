@@ -9,13 +9,8 @@ import { CartService } from '../../services/cart.service';
   templateUrl: './navbarcomponent.html',
 })
 export class Navbarcomponent implements OnInit {
-  /** Texto del campo de búsqueda */
   searchQuery: string = '';
-
-  /** Ciudad/región de entrega (estático, visual) */
   ubicacion: string = 'Colombia';
-
-  /** Cantidad de ítems en el carrito (en vivo desde CartService) */
   cartCount: number = 0;
 
   constructor(
@@ -29,7 +24,6 @@ export class Navbarcomponent implements OnInit {
     });
   }
 
-  /** Ejecuta la búsqueda (navega a /buscar?q= para URL compartible) */
   onSearch(): void {
     const term = this.searchQuery.trim();
     if (term) {
