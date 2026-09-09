@@ -6,15 +6,8 @@ import { environment } from '../../environments/environment';
 import type { OmdbMovieDetail, OmdbSearchResponse } from './omdb.models';
 
 /**
- * Servicio de películas (OMDb API).
- * Patrón replicado del proyecto de referencia USB (`services/`,
- * `inject(HttpClient)`, `providedIn: 'root'`), con mejoras:
- * - URL base + API key centralizadas en `environment` (HTTPS, evita mixed-content).
- * - Respuestas tipadas en `omdb.models.ts`.
- * - `HttpParams` en vez de concatenar strings.
- *
- * Ubicación correcta: `src/app/services/omdb/` (subcarpeta por servicio,
- * igual que `src/app/components/<nombre>/`).
+ * Películas (OMDb API). La URL base y la API key salen de `environment`
+ * y las respuestas van tipadas en `omdb.models.ts`.
  */
 @Injectable({ providedIn: 'root' })
 export class OmdbService {

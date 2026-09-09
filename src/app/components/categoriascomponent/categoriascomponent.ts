@@ -1,4 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ProductStoreService } from '../../services/product-store/product-store.service';
+import { CartService } from '../../services/cart.service';
+import { filterByCategory } from '../../services/product-store/product-filter';
+import type { Producto } from '../../models/producto';
 
 @Component({
   selector: 'app-categoriascomponent',
@@ -7,12 +13,25 @@ import { Component } from '@angular/core';
   styleUrl: './categoriascomponent.css',
 })
 export class Categoriascomponent {
-  /** Nombres de categorías cuya imagen falló: se muestra el icono FA en su lugar. */
+  protected store = inject(ProductStoreService);
+  private cartService = inject(CartService);
+
+  /** Categoría seleccionada vía /categoria/:nombre (null = grilla). */
+  readonly categoriaSeleccionada = signal<string | null>(null);
+
+  /** Productos de la categoría (derivados, sin duplicar estado). */
+  readonly productos = computed(() => {
+    const cat = this.categoriaSeleccionada();
+    if (!cat) {
+      return [];
+    }
+    return filterByCategory(this.store.products(), cat);
+  });
+
+  /** Nombres de categorías cuya imagen falló: se muestra el icono FA. */
   imagenesRotas = new Set<string>();
 
-  onImgError(nombre: string): void {
-    this.imagenesRotas.add(nombre);
-  }
+  agregados = new Set<number>();
 
   categorias = [
     { nombre: 'Vehículos', icono: 'fa-solid fa-car', img: 'https://images.unsplash.com/photo-1511919884226-fd3cad34687c?q=80&w=200&auto=format&fit=crop' },
@@ -25,4 +44,42 @@ export class Categoriascomponent {
     { nombre: 'Moda', icono: 'fa-solid fa-shirt', img: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=200&auto=format&fit=crop' },
     { nombre: 'Juegos y Juguetes', icono: 'fa-solid fa-gamepad', img: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=200&auto=format&fit=crop' },
   ];
+
+  constructor() {
+    const route = inject(ActivatedRoute);
+    this.store.loadAll();
+    route.paramMap
+      .pipe(takeUntilDestroyed())
+      .subscribe((params) => this.categoriaSeleccionada.set(params.get('nombre')));
+  }
+
+  onImgError(nombre: string): void {
+    this.imagenesRotas.add(nombre);
+  }
+
+  recargar(): void {
+    this.store.loadAll(true);
+  }
+
+  formatPrice(precio: number): string {
+    return '$ ' + precio.toLocaleString('es-CO');
+  }
+
+  agregarAlCarrito(id: number): void {
+    const prod = this.store.getById(id);
+    if (!prod) {
+      return;
+    }
+    const producto: Producto = {
+      id: prod.id,
+      title: prod.title,
+      price: prod.price,
+      description: prod.description,
+      category: prod.category,
+      image: prod.image,
+    };
+    this.cartService.agregarProducto(producto);
+    this.agregados.add(id);
+    setTimeout(() => this.agregados.delete(id), 1500);
+  }
 }

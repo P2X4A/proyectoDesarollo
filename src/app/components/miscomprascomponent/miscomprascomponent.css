@@ -1,0 +1,8 @@
+.ml-orders-page {
+  background-color: rgb(235, 235, 235);
+  min-height: 100vh;
+}
+
+.ml-orders-container {
+  max-width: 960px;
+}

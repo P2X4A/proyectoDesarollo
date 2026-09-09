@@ -10,6 +10,8 @@ import { Categoriascomponent } from './components/categoriascomponent/categorias
 import { Mercadoplaycomponent } from './components/mercadoplaycomponent/mercadoplaycomponent';
 
 import { Carritocomponent } from './components/carritocomponent/carritocomponent';
+import { Miscomprascomponent } from './components/miscomprascomponent/miscomprascomponent';
+import { Buscarcomponent } from './components/buscarcomponent/buscarcomponent';
 
 
 const routes: Routes = [
@@ -17,10 +19,13 @@ const routes: Routes = [
   { path: 'crear-producto', component: Crearproductocomponent },
   { path: 'listar-producto', component: Listarproductocomponent },
   { path: 'actualizar-producto/:id', component: Actualizarproductocomponent },
-  { path: 'eliminar-producto', component: Eliminarproductocomponent },
+  { path: 'eliminar-producto/:id', component: Eliminarproductocomponent },
   { path: 'categoria', component: Categoriascomponent },
+  { path: 'categoria/:nombre', component: Categoriascomponent },
   { path: 'mercado-play', component: Mercadoplaycomponent },
   { path: 'carrito', component: Carritocomponent },
+  { path: 'mis-compras', component: Miscomprascomponent },
+  { path: 'buscar', component: Buscarcomponent },
   { path: '**', redirectTo: '', pathMatch: 'full' },
 ];
 

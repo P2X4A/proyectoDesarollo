@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter, RouterModule } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
 import { Contenidocomponent } from './contenidocomponent';
 
 describe('Contenidocomponent', () => {
@@ -7,6 +9,8 @@ describe('Contenidocomponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports: [RouterModule],
+      providers: [provideRouter([]), provideHttpClient()],
       declarations: [Contenidocomponent],
     }).compileComponents();
 
@@ -17,5 +21,10 @@ describe('Contenidocomponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('empieza en el primer banner', () => {
+    expect(component.carouselIndex).toBe(0);
+    expect(component.banners.length).toBeGreaterThan(0);
   });
 });

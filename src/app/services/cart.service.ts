@@ -7,20 +7,20 @@ import { EstadoPedido, Pedido } from '../models/pedido';
 const CARRITO_KEY = 'carrito';
 const HISTORIAL_KEY = 'historialPedidos';
 
-// providedIn: 'root' => una sola instancia compartida por toda la app.
-// Así, sin importar qué componente inyecte CartService (el tuyo, el navbar
-// de tu compañero de diseño, la página de producto de tu compañero 3),
-// todos ven el mismo carrito.
+/**
+ * Carrito compartido por toda la app (una sola instancia con
+ * providedIn: 'root') y persistido en localStorage.
+ */
 @Injectable({
   providedIn: 'root',
 })
 export class CartService {
   // BehaviorSubject guarda el último valor emitido y se lo entrega
-  // inmediatamente a quien se suscriba (ideal para el contador del navbar).
+  // inmediatamente a quien se suscriba
   private carritoSubject = new BehaviorSubject<CarritoItem[]>(this.cargarCarrito());
   carrito$: Observable<CarritoItem[]> = this.carritoSubject.asObservable();
 
-  // ---------- Persistencia (localStorage) ----------
+  // Persistencia
 
   private cargarCarrito(): CarritoItem[] {
     const data = localStorage.getItem(CARRITO_KEY);
@@ -36,7 +36,7 @@ export class CartService {
     return this.carritoSubject.value;
   }
 
-  // ---------- Operaciones del carrito ----------
+  // Operaciones del carrito
 
   agregarProducto(producto: Producto, cantidad: number = 1): void {
     const items = [...this.obtenerCarrito()];
@@ -76,7 +76,7 @@ export class CartService {
     return this.obtenerCarrito().reduce((acc, i) => acc + i.cantidad, 0);
   }
 
-  // ---------- Checkout / pedidos ----------
+  //  Checkout / pedidos
 
   confirmarCompra(datos: {
     nombre: string;
@@ -87,7 +87,7 @@ export class CartService {
   }): Pedido {
     const items = this.obtenerCarrito();
     const subtotal = this.calcularSubtotal();
-    const envio = subtotal > 0 ? 8000 : 0; // costo de envío fijo de ejemplo, ajústalo si quieres
+    const envio = subtotal > 0 ? 8000 : 0; // costo de envío fijo de ejemplo, se puede ajustar en un futuro si es necesario.
 
     const pedido: Pedido = {
       id: Date.now(),

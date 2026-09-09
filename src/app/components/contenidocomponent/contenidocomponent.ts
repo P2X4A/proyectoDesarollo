@@ -1,7 +1,6 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
-import { FakeStoreService } from '../../services/fake-store/fake-store.service';
+import { Component, OnInit, OnDestroy, computed, inject } from '@angular/core';
+import { ProductStoreService } from '../../services/product-store/product-store.service';
 import { CartService } from '../../services/cart.service';
-import type { Product } from '../../services/fake-store/product.model';
 import type { Producto } from '../../models/producto';
 
 /** Banner del carrusel hero */
@@ -30,7 +29,7 @@ interface CategoriaDestacada {
   styleUrl: './contenidocomponent.css',
 })
 export class Contenidocomponent implements OnInit, OnDestroy {
-  private fakeStoreService = inject(FakeStoreService);
+  private store = inject(ProductStoreService);
   private cartService = inject(CartService);
 
   /** IDs con confirmación visual de "agregado" (feedback temporal). */
@@ -85,9 +84,25 @@ export class Contenidocomponent implements OnInit, OnDestroy {
     { nombre: 'Belleza',      icono: 'fa-solid fa-spa',                color: 'rgb(230, 80, 180)' },
   ];
 
-  /* ── Ofertas del día (API) ── */
-  ofertas: any[] = [];
-  isLoadingOfertas: boolean = true;
+  /* ── Ofertas del día (desde el store: API + mis publicaciones) ── */
+  ofertas = computed(() =>
+    this.store.products().slice(0, 8).map((prod) => {
+      const descuento = Math.floor(Math.random() * 30) + 10;
+      const precioOriginal = Math.floor(prod.price * (1 + descuento / 100));
+      return {
+        id: prod.id,
+        nombre: prod.title,
+        precio: prod.price,
+        precioOriginal,
+        imagen: prod.image,
+        descuento,
+        envioGratis: prod.price > 200000,
+        calificacion: 4.5,
+        vendidos: 120,
+      };
+    }),
+  );
+  isLoadingOfertas = this.store.loading;
 
   /* ── Productos más buscados (lista real de mercadolibre.com.co) ── */
   busquedasPopulares: string[] = [
@@ -103,7 +118,7 @@ export class Contenidocomponent implements OnInit, OnDestroy {
   /* ── Ciclo de vida ── */
   ngOnInit(): void {
     this.carouselInterval = setInterval(() => this.nextBanner(), 5000);
-    this.cargarOfertas();
+    this.store.loadAll();
   }
 
   ngOnDestroy(): void {
@@ -112,40 +127,14 @@ export class Contenidocomponent implements OnInit, OnDestroy {
     }
   }
 
-  cargarOfertas() {
-    this.fakeStoreService.getAllProducts().subscribe({
-      next: (productos: Product[]) => {
-        // Tomamos los primeros 8 productos y los adaptamos
-        // FakeStore trae precios en dólares, simulamos conversión a pesos colombianos (* 4000)
-        this.ofertas = productos.slice(0, 8).map((prod: Product) => {
-            const precioConvertido = prod.price * 4000;
-            // Simulamos datos extras
-            const descuento = Math.floor(Math.random() * 30) + 10;
-            const precioOriginal = Math.floor(precioConvertido * (1 + descuento / 100));
-            return {
-              id: prod.id,
-              nombre: prod.title,
-              precio: Math.floor(precioConvertido),
-              precioOriginal: precioOriginal,
-              imagen: prod.image, // FakeStoreAPI provee buenas imágenes
-              descuento: descuento,
-              envioGratis: prod.price > 50,
-              calificacion: prod.rating?.rate || 4.5,
-              vendidos: prod.rating?.count || 120
-            };
-          });
-        this.isLoadingOfertas = false;
-      },
-      error: (err) => {
-        console.error('Error al cargar productos de FakeStore', err);
-        this.isLoadingOfertas = false;
-      }
-    });
-  }
-
   /* ── Carousel ── */
   nextBanner(): void {
     this.carouselIndex = (this.carouselIndex + 1) % this.banners.length;
+  }
+
+  /** Reintenta cargar el catálogo tras un error de red. */
+  recargarOfertas(): void {
+    this.store.loadAll(true);
   }
 
   prevBanner(): void {
@@ -161,8 +150,8 @@ export class Contenidocomponent implements OnInit, OnDestroy {
     return '$ ' + precio.toLocaleString('es-CO');
   }
 
-  /** Agrega una oferta al carrito (precios ya convertidos a COP). */
-  agregarAlCarrito(oferta: any): void {
+  /** Agrega una oferta al carrito (precios del store ya están en COP). */
+  agregarAlCarrito(oferta: { id: number; nombre: string; precio: number; imagen: string }): void {
     const producto: Producto = {
       id: oferta.id,
       title: oferta.nombre,

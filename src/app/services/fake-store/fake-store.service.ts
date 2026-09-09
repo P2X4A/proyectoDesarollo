@@ -6,15 +6,9 @@ import { environment } from '../../environments/environment';
 import type { Product, ProductPayload } from './product.model';
 
 /**
- * Servicio de productos (Fake Store API).
- * Patrón replicado del proyecto de referencia USB (`services/`,
- * `inject(HttpClient)`, `providedIn: 'root'`), con mejoras:
- * - URL base centralizada en `environment`.
- * - Respuestas tipadas en `product.model.ts`.
- * - CRUD completo: FakeStore soporta GET/POST/PUT/DELETE (persistencia simulada).
- *
- * Ubicación correcta: `src/app/services/fake-store/` (subcarpeta por servicio,
- * igual que `src/app/components/<nombre>/`).
+ * Productos (Fake Store API). Respuestas tipadas en `product.model.ts`.
+ * Ojo: FakeStore simula POST/PUT/DELETE pero no persiste entre recargas,
+ * por eso el `ProductStoreService` guarda los cambios en localStorage.
  */
 @Injectable({ providedIn: 'root' })
 export class FakeStoreService {

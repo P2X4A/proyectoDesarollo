@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ProductoService, Producto } from '../../services/producto/producto.service';
+import { ProductStoreService } from '../../services/product-store/product-store.service';
 
 @Component({
   selector: 'app-actualizarproductocomponent',
@@ -8,53 +8,85 @@ import { ProductoService, Producto } from '../../services/producto/producto.serv
   templateUrl: './actualizarproductocomponent.html',
   styleUrl: './actualizarproductocomponent.css',
 })
-export class Actualizarproductocomponent implements OnInit {
-  productoId!: number;
+export class Actualizarproductocomponent {
+  private store = inject(ProductStoreService);
+  private router = inject(Router);
+
+  private readonly productId: number | null;
 
   producto = {
     nombre: '',
-    precio: 0,
+    precio: null as number | null,
     categoria: '',
     descripcion: '',
+    imagen: '',
   };
 
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    private productoService: ProductoService,
-  ) {}
+  isLoading = true;
+  isSaving = false;
+  errorMsg: string | null = null;
 
-  ngOnInit(): void {
-    this.productoId = Number(this.route.snapshot.paramMap.get('id'));
-    this.productoService.obtenerProductoPorId(this.productoId).subscribe({
-      next: (prod: Producto) => {
+  constructor() {
+    const id = Number(inject(ActivatedRoute).snapshot.paramMap.get('id'));
+    this.productId = Number.isFinite(id) ? id : null;
+
+    if (this.productId === null) {
+      this.errorMsg = 'Publicación no encontrada.';
+      this.isLoading = false;
+      return;
+    }
+
+    this.store.loadAll();
+
+    // Reacciona cuando el store termina de cargar (o si ya tenía datos).
+    effect(() => {
+      if (this.store.loading() || !this.isLoading || this.productId === null) {
+        return;
+      }
+      const found = this.store.getById(this.productId);
+      if (found) {
         this.producto = {
-          nombre: prod.titulo,
-          precio: prod.precio,
-          categoria: prod.categoria,
-          descripcion: prod.descripcion,
+          nombre: found.title,
+          precio: found.price,
+          categoria: found.category,
+          descripcion: found.description,
+          imagen: found.image,
         };
-      },
-      error: (err) => console.error('Error al cargar producto', err),
+      } else {
+        this.errorMsg = `No existe una publicación con id ${this.productId}.`;
+      }
+      this.isLoading = false;
     });
   }
 
   onSubmit() {
-    this.productoService.actualizarProducto(this.productoId, {
-      titulo: this.producto.nombre,
-      precio: Number(this.producto.precio),
-      categoria: this.producto.categoria,
-      descripcion: this.producto.descripcion,
-      imagen: '',
-    }).subscribe({
-      next: () => {
-        alert('Producto actualizado exitosamente');
-        this.router.navigate(['/listar-producto']);
-      },
-      error: (err) => {
-        console.error('Error al actualizar producto', err);
-        alert('No se pudo actualizar el producto.');
-      },
-    });
+    if (this.productId === null || this.isSaving) {
+      return;
+    }
+    this.isSaving = true;
+    this.errorMsg = null;
+
+    this.store
+      .update(this.productId, {
+        title: this.producto.nombre.trim(),
+        price: Number(this.producto.precio) || 0,
+        description: this.producto.descripcion.trim(),
+        category: this.producto.categoria,
+        image: this.producto.imagen.trim(),
+      })
+      .subscribe({
+        next: (updated) => {
+          if (updated) {
+            this.router.navigate(['/listar-producto']);
+          } else {
+            this.isSaving = false;
+            this.errorMsg = 'La publicación ya no existe.';
+          }
+        },
+        error: () => {
+          this.isSaving = false;
+          this.errorMsg = 'No se pudo guardar. Inténtalo de nuevo.';
+        },
+      });
   }
 }
